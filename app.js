@@ -32,6 +32,7 @@ const responses = {
     createGist: `- Please [create a gist](https://gist.github.com/) if your code is more than 8-10 lines long. It's difficult to keep track of the conversation in the chatroom when there is a huge block of code in the way. It's also difficult for us to look at your code this way.`,
     notAngularQuestion: `- For **ng-cli** related questions, see [angular-cli on gitter](https://gitter.im/angular/angular-cli). For **ng-bootstrap**, [open a question on SO](http://stackoverflow.com/questions/tagged/ng-bootstrap).`,
     angular3: `- There won't be Angular3. See more information on [Angular versions past version 2.x.x](http://angularjs.blogspot.co.nz/2016/12/ok-let-me-explain-its-going-to-be.html)`,
+    noStoredReply: `- I'm Sorry, I don't have a reply for that, i'm not very smart but you can help make better better by [contributing](https://github.com/Toxicable/angular-gitter-replybot)`
 };
 
 request(streamOptions)
@@ -44,7 +45,7 @@ request(streamOptions)
         }
 
         const msg = JSON.parse(msgString)
-        if (msg.fromUser.id != myId || !isProd) {
+        if ((msg.fromUser.id != myId || !isProd) && (!msg.text.startsWith('DEBUG'))) {
             sendReply(msg);
             return;
         }
@@ -54,6 +55,7 @@ request(streamOptions)
 
 function sendReply(msg) {
     let replyText = getReply(msg.text);
+    replyText = !isProd ? `DEBUG: ${replyText}` : replyText;
     if(!replyText){
         return;
     }
@@ -74,6 +76,10 @@ function getReply(text){
     }
 
     if(text.startsWith(botKeyWord)){
+        if(text.includes('replies')){
+          return Object.keys(responses).reduce((a, b) => `${a}, ${b}`, `- Replies you can ask me for:`)
+        }
+
         if(text.includes('getting started')){
             return responses.gettingStarted;
         }
@@ -98,10 +104,14 @@ function getReply(text){
             return responses.notAngularQuestion;
         }
 
+        if(text.includes('not enough')){
+          return responses.notEnoughInfo;
+        }
 
-
-        return response.notEnoughInfo;
+        return responses.noStoredReply;
     }
 
     return '';
 }
+
+console.log('Reply Bot Started');
