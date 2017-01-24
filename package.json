@@ -1,0 +1,19 @@
+{
+  "name": "angular-gitter-replybot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "repository": {
+    "type": "public",
+    "url": "https://github.com/Toxicable/angular-gitter-replybot"
+  },
+  "scripts": {
+    "start": "set NODE_ENV=dev && node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fabian Wiles",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.79.0"
+  }
+}
