@@ -53,14 +53,14 @@ request(streamOptions)
     })
 
 function sendReply(msg) {
-    const replyText = getReply(msg.text)
+    let replyText = getReply(msg.text);
     if(!replyText){
         return;
     }
     const reply = Object.assign({}, replyOptions, { form: { text: replyText } });
     request(reply)
         .on('error', handError)
-        .on('response', response => console.log('reply sent'))
+        .on('response', response => console.log('reply sent'));
 }
 
 function handError(error) {
@@ -77,6 +77,28 @@ function getReply(text){
         if(text.includes('getting started')){
             return responses.gettingStarted;
         }
+
+        if(text.includes('not enough info')){
+            return responses.notEnoughInfo;
+        }
+
+        if(text.includes('create pl')){
+            return responses.createPlunker;
+        }
+
+        if(text.includes('create gist')){
+            return responses.createPlunker;
+        }
+
+        if(text.includes('format')){
+            return responses.pleaseFormat;
+        }
+
+        if(text.includes('not related')){
+            return responses.notAngularQuestion;
+        }
+
+
 
         return response.notEnoughInfo;
     }
