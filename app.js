@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 
-var request = require('request');
+const request = require('request');
 
-var isProd = process.env.NODE_ENV === 'prod';
+const isProd = process.env.NODE_ENV === 'prod';
 
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
-var roomId = isProd ? process.env.ROOM_ID : '5886f79fd73408ce4f459bfd';
-var token = process.env.TOKEN
-var myId = '57787d7fc2f0db084a2127f1';
-var heartbeat = " \n";
-var botKeyWord = "$reply";
-var headers = { 'Authorization': 'Bearer ' + token }
+const roomId = isProd ? process.env.ROOM_ID : '5886f79fd73408ce4f459bfd';
+const token = process.env.TOKEN
+const myId = '57787d7fc2f0db084a2127f1';
+const heartbeat = " \n";
+const botKeyWord = "$reply";
+const headers = { 'Authorization': 'Bearer ' + token }
 
-var streamOptions = {
+const streamOptions = {
     url: 'https://stream.gitter.im/v1/rooms/' + roomId + '/chatMessages',
     headers,
     method: 'GET',
 };
 
-var replyOptions = {
+const replyOptions = {
     url: 'https://api.gitter.im/v1/rooms/' + roomId + '/chatMessages',
     headers,
     method: 'POST'
@@ -43,7 +43,7 @@ request(streamOptions)
             return;
         }
 
-        var msg = JSON.parse(msgString)
+        const msg = JSON.parse(msgString)
         if (msg.fromUser.id != myId || !isProd) {
             sendReply(msg);
             return;
@@ -53,11 +53,11 @@ request(streamOptions)
     })
 
 function sendReply(msg) {
-    var replyText = getReply(msg.text)
+    const replyText = getReply(msg.text)
     if(!replyText){
         return;
     }
-    var reply = Object.assign({}, replyOptions, { form: { text: replyText } });
+    const reply = Object.assign({}, replyOptions, { form: { text: replyText } });
     request(reply)
         .on('error', handError)
         .on('response', response => console.log('reply sent'))
@@ -68,12 +68,17 @@ function handError(error) {
 }
 
 function getReply(text){
+    text = text.toLowerCase(text);
     if(text.includes('angular3') || text.includes('angular 3')) {
         return responses.angular3;
     }
 
-    if(text.startsWith(botKeyWord) && text.includes('getting started')){
-        return responses.gettingStarted;
+    if(text.startsWith(botKeyWord)){
+        if(text.includes('getting started')){
+            return responses.gettingStarted;
+        }
+
+        return response.notEnoughInfo;
     }
 
     return '';
