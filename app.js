@@ -60,15 +60,17 @@ function handError(error) {
 function getReply(text){
     if(text.includes('angular3') || text.includes('angular 3')) {
         return replyMap['angular3'];  
+    }+
+
+    if(text.startsWith(botKeyWord) && text.includes('replies')){
+        return Object.keys(replyMap).reduce((a, b) => `${a}, ${b}`);
     }
 
     if(text.startsWith(botKeyWord) && text.includes('getting started')){
           return replyMap['getting started'];
     }
 
-    if(text.startsWith(botKeyWord) && text.includes('replies')){
-        return Object.keys(replyMap).reduce((a, b) => `${a}, ${b}`);
-    }
+
 
     return '';
 }
