@@ -45,7 +45,7 @@ request(streamOptions)
         }
 
         const msg = JSON.parse(msgString)
-        if ((!msg.text.startsWith('ReplyBot')) && (!msg.text.startsWith('DEBUG'))) {
+        if ((!msg.text.startsWith('ReplyBot:')) && (!msg.text.startsWith('DEBUG:'))) {
             sendReply(msg);
             return;
         }
@@ -55,10 +55,10 @@ request(streamOptions)
 
 function sendReply(msg) {
     let replyText = getReply(msg.text);
-    replyText = !isProd ? `DEBUG: ${replyText}` : `ReplyBot: replyText`;
     if(!replyText){
         return;
     }
+    replyText = !isProd ? `DEBUG: ${replyText}` : `ReplyBot: ${replyText}`;
     const reply = Object.assign({}, replyOptions, { form: { text: replyText } });
     request(reply)
         .on('error', handError)
