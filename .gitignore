@@ -3,7 +3,7 @@ logs
 *.log
 npm-debug.log*
 
-!.vscode/launch.json
+.vscode/launch.json
 
 # Runtime data
 pids
