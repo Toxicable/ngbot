@@ -59,18 +59,25 @@ function handError(error) {
 
 function getReply(text){
     if(text.includes('angular3') || text.includes('angular 3')) {
-        return "For more information on Angular's versioning past version 2, please see: http://angularjs.blogspot.co.nz/2016/12/ok-let-me-explain-its-going-to-be.html";
+        return replyMap['angular3'];  
     }
 
     if(text.startsWith(botKeyWord) && text.includes('getting started')){
-        return `To get started with Angular, do [Quickstart](https://angular.io/docs/ts/latest/quickstart.html). 
+          return replyMap['getting started'];
+    }
+
+    if(text.startsWith(botKeyWord) && text.includes('replies')){
+        return Object.keys(replyMap).reduce((a, b) => `${a}, ${b}`);
+    }
+
+    return '';
+}
+
+replyMap = {
+    'angular3': `For more information on Angular's versioning past version 2, please see: [here](http://angularjs.blogspot.co.nz/2016/12/ok-let-me-explain-its-going-to-be.html)`,
+    'getting started': `To get started with Angular, do [Quickstart](https://angular.io/docs/ts/latest/quickstart.html). 
         After that, go through [Tour of Heroes (ToH)](https://angular.io/docs/ts/latest/tutorial/). 
         Check the [Guide](https://angular.io/docs/ts/latest/guide/) for how to proceed after that. 
         Good (often advanced) blogs are [Thoughtram](https://blog.thoughtram.io/exploring-angular-2/) and [Victor Savkin's blog](https://vsavkin.com/).
-        Oh and use the [CLI](https://github.com/angular/angular-cli) unless you have a complex build process `
-    
-    }
-
-
-    return '';
+        Oh and use the [CLI](https://github.com/angular/angular-cli) unless you have a complex build process`
 }
