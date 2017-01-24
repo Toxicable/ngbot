@@ -45,7 +45,7 @@ request(streamOptions)
         }
 
         const msg = JSON.parse(msgString)
-        if ((msg.fromUser.id != myId || !isProd) && (!msg.text.startsWith('DEBUG'))) {
+        if ((!msg.text.startsWith('ReplyBot')) && (!msg.text.startsWith('DEBUG'))) {
             sendReply(msg);
             return;
         }
@@ -55,7 +55,7 @@ request(streamOptions)
 
 function sendReply(msg) {
     let replyText = getReply(msg.text);
-    replyText = !isProd ? `DEBUG: ${replyText}` : replyText;
+    replyText = !isProd ? `DEBUG: ${replyText}` : `ReplyBot: replyText`;
     if(!replyText){
         return;
     }
