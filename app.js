@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+try{
+  #!/usr/bin/env node
 
 const request = require('request');
 
@@ -38,7 +39,7 @@ const msgContainsReplies = {
 };
 
 const otherReplies = {
-  noStoredReply: `I'm Sorry, I don't have a reply for that, i'm not very smart but you can help make me better better by [contributing](https://github.com/Toxicable/angular-gitter-replybot)`,
+  noStoredReply: `I'm Sorry, I don't have a reply for that, i'm not very smart but you can help make me better by [contributing](https://github.com/Toxicable/angular-gitter-replybot)`,
 
 }
 
@@ -76,7 +77,7 @@ function sendReply(msg) {
 }
 
 function handError(error) {
-  console.error(error);
+  console.lot('HANDLED ERROR: ', error);
 }
 
 function getReply(text) {
@@ -104,3 +105,7 @@ function getReply(text) {
 }
 
 console.log('Reply Bot Started');
+
+}catch(error){
+  console.log('ERROR: ', error)
+}
