@@ -3,6 +3,10 @@ logs
 *.log
 npm-debug.log*
 
+*.js
+*.map
+.vscode/*
+
 .vscode/launch.json
 .idea
 

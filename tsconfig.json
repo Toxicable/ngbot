@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "watch": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  }
+}
+

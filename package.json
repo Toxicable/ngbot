@@ -2,18 +2,27 @@
   "name": "angular-gitter-replybot",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/index.js",
   "repository": {
     "type": "public",
     "url": "https://github.com/Toxicable/angular-gitter-replybot"
   },
   "scripts": {
-    "start": "set NODE_ENV=dev && node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ts-node -- ./src/index.ts"
   },
   "author": "Fabian Wiles",
   "license": "MIT",
   "dependencies": {
+    "node-gitter": "^2.0.5",
     "request": "^2.79.0"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.4",
+    "nodemon": "^1.11.0",
+    "ts-node": "^2.0.0",
+    "typescript": "^2.1.5",
+    "tslint": "^4.4.1"
   }
 }
