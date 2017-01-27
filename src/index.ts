@@ -1,5 +1,4 @@
-import { replies } from './replies/contains'
-import { otherReplies } from './replies/others'
+import { replies } from './replies';
 import { Message } from './models/message';
 
 const request = require('request');
@@ -59,7 +58,7 @@ function getReply(text) {
         .every(part => text.includes(part))
       )
 
-    return key ? replies[key] : otherReplies.noStoredReply;
+    return key ? replies[key] : replies['noStoredReply'];
   }
 
   return '';
