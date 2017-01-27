@@ -9,7 +9,7 @@ const isProd = process.env.NODE_ENV === 'prod';
 
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
 const roomName = isProd ? process.env.ROOM_NAME : 'angular-gitter-replybot/Lobby';
-const botKeyWord = "$reply";
+const botKeyWord = "$a";
 let botId = '';
 
 gitter.currentUser()
@@ -32,12 +32,13 @@ gitter.currentUser()
         }
         replyText = `@${message.model.fromUser.username}: ${replyText}`;
         room.send(replyText);
+        console.log('Reply sent')
         return;
       }
-      console.log('self message, no reply');
+      console.log('Self message, no reply');
     });
 
-    console.log('reply bot ready');
+    console.log('Angie Ready');
   })
 
 function getReply(text) {
@@ -64,4 +65,4 @@ function getReply(text) {
   return '';
 }
 
-console.log('Reply Bot Started');
+console.log('Angie Started');
