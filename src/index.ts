@@ -9,12 +9,13 @@ const gitter = new Gitter(process.env.TOKEN)
 const isProd = process.env.NODE_ENV === 'prod';
 
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
-const roomName = isProd ? process.env.ROOM_NAME : 'angular-gitter-replybot/Lobby';
+const roomNames = isProd ? process.env.ROOMS : 'angular-gitter-replybot/Lobby,angular/angular';
 const botKeyWord = "$a";
 const apiDocsUrl = 'https://angular.io/docs/ts/latest/api/api-list.json';
 const baseApiUrl = 'https://angular.io/docs/ts/latest/api/';
 let apis: Api[];
 let botId = '';
+
 
 
 request(apiDocsUrl, (error, response, body) => {
@@ -29,30 +30,36 @@ request(apiDocsUrl, (error, response, body) => {
 gitter.currentUser()
   .then(user => {
     botId = user.id;
-    return gitter.rooms.join(roomName)
+    return roomNames
+    .split(',')
+    .map(room => gitter.rooms.join(room));
   })
-  .then(room => {
-    const events = room.streaming().chatMessages();
+  .then(roomPromises => Promise.all(roomPromises))
+  .then(rooms => {
+    rooms.forEach(room => {
+      const events = room.streaming().chatMessages();
 
-    events.on('chatMessages', (message: Message) => {
-      if (message.operation !== 'create') {
-        return;
-      }
-      if (message.model.fromUser.id !== botId || message.model.text.includes('test')) {
-
-        let replyText = getReply(message.model.text);
-        if (!replyText) {
+      events.on('chatMessages', (message: Message) => {
+        if (message.operation !== 'create') {
+          console.log('Non new message')
           return;
         }
-        replyText = `@${message.model.fromUser.username}: ${replyText}`;
-        room.send(replyText);
-        console.log('Reply sent')
-        return;
-      }
-      console.log('Self message, no reply');
-    });
+        if (message.model.fromUser.id !== botId || message.model.text.includes('test')) {
 
-    console.log('Angie Ready');
+          let replyText = getReply(message.model.text);
+          if (!replyText) {
+            return;
+          }
+          replyText = `@${message.model.fromUser.username}: ${replyText}`;
+          room.send(replyText);
+          console.log('Reply sent')
+          return;
+        }
+        console.log('Self message');
+      });
+
+      console.log(`Room: ${room.name} ready!`);
+    })
   })
 
 function getReply(text: string): string {
@@ -68,7 +75,7 @@ function getReply(text: string): string {
     }
 
     if (text.includes('docs')) {
-      let matchedApi = apis.find(api => text.includes(api.title))
+      let matchedApi = apis.find(api => text.includes(api.title.toLowerCase()))
 
       if (matchedApi) {
         return baseApiUrl + matchedApi.path;
