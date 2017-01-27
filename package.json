@@ -8,8 +8,8 @@
     "url": "https://github.com/Toxicable/angular-gitter-replybot"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build:live",
+    "start": "tsc -w",
+    "build": "tsc",
     "build:live": "nodemon --exec ts-node -- ./src/index.ts"
   },
   "author": "Fabian Wiles",

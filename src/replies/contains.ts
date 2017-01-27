@@ -6,7 +6,7 @@ export const replies = {
   'createg gist': `Please [create a gist](https://gist.github.com/) if your code is more than 8-10 lines long. It's difficult to keep track of the conversation in the chatroom when there is a huge block of code in the way. It's also difficult for us to look at your code this way.`,
   'not angularQuestion': `For **ng-cli** related questions, see [angular-cli on gitter](https://gitter.im/angular/angular-cli). For **ng-bootstrap**, [open a question on SO](http://stackoverflow.com/questions/tagged/ng-bootstrap).`,
   'angular3': `There won't be Angular3. See more information on [Angular versions past version 2.x.x](http://angularjs.blogspot.co.nz/2016/12/ok-let-me-explain-its-going-to-be.html)`,
-  'route reuse': `For more information on the Route Reuse Stratergy [please see here](http://stackoverflow.com/questions/41280471/how-to-implement-routereusestrategy-shoulddetach-for-specific-routes-in-angular/41515648#41515648)`
+  'route reuse': `For more information on the Route Reuse Stratergy [please see here](http://stackoverflow.com/questions/41280471/how-to-implement-routereusestrategy-shoulddetach-for-specific-routes-in-angular/41515648#41515648)`,
   //trackBY
-
+  'track by': `\`trackBy:item?.id\` does not work, please see docs for more information: [Docs](https://angular.io/docs/ts/latest/api/common/index/NgFor-directive.html)`
 }

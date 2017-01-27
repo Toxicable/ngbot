@@ -1,5 +1,6 @@
 import { replies } from './replies/contains'
 import { otherReplies } from './replies/others'
+import { Message } from './models/message';
 
 const request = require('request');
 const Gitter = require('node-gitter')
@@ -8,22 +9,19 @@ const gitter = new Gitter(process.env.TOKEN)
 const isProd = process.env.NODE_ENV === 'prod';
 
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
-const roomId = isProd ? process.env.ROOM_ID : '5886f79fd73408ce4f459bfd';
+const roomName = isProd ? process.env.ROOM_NAME : 'angular-gitter-replybot/Lobby';
 const botKeyWord = "$reply";
-
 let botId = '';
 
 gitter.currentUser()
   .then(user => {
     botId = user.id;
+    return gitter.rooms.join(roomName)
   })
-  .then(() => gitter.rooms.join('angular-gitter-replybot/Lobby'))
   .then(room => {
-    var events = room.streaming().chatMessages();
+    const events = room.streaming().chatMessages();
 
-    console.log('Reply Bot Ready');
-    events.on('chatMessages', message => {
-
+    events.on('chatMessages', (message: Message) => {
       if (message.operation !== 'create') {
         return;
       }
@@ -33,11 +31,14 @@ gitter.currentUser()
         if (!replyText) {
           return;
         }
+        replyText = `@${message.model.fromUser.username}: ${replyText}`;
         room.send(replyText);
-        return
+        return;
       }
-      console.log('self message, no reply')
+      console.log('self message, no reply');
     });
+
+    console.log('reply bot ready');
   })
 
 function getReply(text) {
@@ -48,13 +49,13 @@ function getReply(text) {
 
   if (text.startsWith(botKeyWord)) {
     if (text.includes('help')) {
-      return 'Replies you can ask me for: ' + Object.keys(replies)
-        .join(', ')
+      return 'Replies you can ask me for: ' + Object.keys(replies).join(', ')
     }
 
     const key = Object.keys(replies)
       .find(key => key.toLowerCase()
-        .split(" ")
+        .split(' ')
+        //check to see if each part of the users message is in the key
         .every(part => text.includes(part))
       )
 
