@@ -1,5 +1,6 @@
 import { replies } from './replies';
 import { Message } from './models/message';
+import { ApiModule, Api } from './models/api-docs-module';
 
 const request = require('request');
 const Gitter = require('node-gitter')
@@ -10,7 +11,20 @@ const isProd = process.env.NODE_ENV === 'prod';
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
 const roomName = isProd ? process.env.ROOM_NAME : 'angular-gitter-replybot/Lobby';
 const botKeyWord = "$a";
+const apiDocsUrl = 'https://angular.io/docs/ts/latest/api/api-list.json';
+const baseApiUrl = 'https://angular.io/docs/ts/latest/api/';
+let apis: Api[];
 let botId = '';
+
+
+request(apiDocsUrl, (error, response, body) => {
+  if (!error && response.statusCode == 200) {
+    const apiModules: ApiModule = JSON.parse(body);
+    apis = Object.keys(apiModules)
+      .map(key => apiModules[key])
+      .reduce((a, b) => [...a, ...b], [])
+  }
+})
 
 gitter.currentUser()
   .then(user => {
@@ -41,15 +55,24 @@ gitter.currentUser()
     console.log('Angie Ready');
   })
 
-function getReply(text) {
-  text = text.toLowerCase(text);
+function getReply(text: string): string {
+  text = text.toLowerCase();
   if (text.includes('angular3') || text.includes('angular 3')) {
     return replies['angular3'];
   }
 
   if (text.startsWith(botKeyWord)) {
+
     if (text.includes('help')) {
       return 'Replies you can ask me for: ' + Object.keys(replies).join(', ')
+    }
+
+    if (text.includes('docs')) {
+      let matchedApi = apis.find(api => text.includes(api.title))
+
+      if (matchedApi) {
+        return baseApiUrl + matchedApi.path;
+      }
     }
 
     const key = Object.keys(replies)
@@ -57,7 +80,7 @@ function getReply(text) {
         .split(' ')
         //check to see if each part of the users message is in the key
         .every(part => text.includes(part))
-      )
+      );
 
     return key ? replies[key] : replies['noStoredReply'];
   }

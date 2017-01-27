@@ -8,7 +8,7 @@ export const replies = {
   'angular3': `There won't be Angular3. See more information on [Angular versions past version 2.x.x](http://angularjs.blogspot.co.nz/2016/12/ok-let-me-explain-its-going-to-be.html)`,
   'route reuse': `For more information on the Route Reuse Stratergy [please see here](http://stackoverflow.com/questions/41280471/how-to-implement-routereusestrategy-shoulddetach-for-specific-routes-in-angular/41515648#41515648)`,
   'track by': `\`trackBy:item?.id\` does not work, please see docs for more information: [Docs](https://angular.io/docs/ts/latest/api/common/index/NgFor-directive.html)`,
-  'angularjs': `This room is for Angular (version 2+), please visit [AngularJS](https://gitter.im/angular/angular.js)`,
+  'angularjs': `This room is for Angular (version 2+), please visit [here for AngularJS](https://gitter.im/angular/angular.js)`,
   'noStoredReply': `I'm Sorry, I don't have a reply for that, i'm not very smart but you can help make me better by [contributing](https://github.com/Toxicable/angular-gitter-replybot)`,
 
 }
