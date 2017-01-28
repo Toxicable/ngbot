@@ -2,9 +2,14 @@ import { replies } from './replies';
 import { Message, User, Model } from './models/message';
 import { ApiModule, Api } from './models/api-docs-module';
 import { Observable } from 'rxjs';
-
 const request = require('request');
 const Gitter = require('node-gitter')
+
+console.log('Enviroment Variables:');
+console.log('TOKEN: ' + process.env.TOKEN);
+console.log('NODE_ENV: ' + process.env.NODE_ENV);
+console.log('ROOMS: ' + process.env.ROOMS);
+
 const gitter = new Gitter(process.env.TOKEN)
 
 const isProd = process.env.NODE_ENV === 'prod';
@@ -17,6 +22,12 @@ const docsApiUrl = docsApiBaseUrl + '/api-list.json';
 let apis: Api[];
 let botId = '';
 
+//this should the errors in the server logs
+var http = require("http");
+http.createServer(function (request, response) {
+   response.writeHead(200, {'Content-Type': 'text/plain'});
+   response.end('You\'re not really meant to be here');
+}).listen(8080);
 
 
 request(docsApiUrl, (error, response, body) => {
@@ -47,7 +58,7 @@ Observable.fromPromise(gitter.currentUser())
       })
     )
   })
-  .subscribe();
+  .subscribe(() => {}, error => console.log('ERROR: ' + error));
 
 function handleIncommingMessage(room, message: Model) {
   let replyText = getReply(message.text);
@@ -55,7 +66,8 @@ function handleIncommingMessage(room, message: Model) {
     console.log('No reply sent')
     return;
   }
-  replyText = `@${message.fromUser.username}: ${replyText}`;
+  //replyText = `@${message.fromUser.username}: ${replyText}`;
+  replyText = isProd ? replyText : `DEBUG: ${replyText}`;
   room.send(replyText);
   console.log('Reply sent')
 }
