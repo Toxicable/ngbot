@@ -42,6 +42,7 @@ Observable.fromPromise(gitter.currentUser())
         return Observable.fromEvent(events, 'chatMessages')
           .filter((message: Message) => message.operation === 'create')
           .map((message: Message) => message.model)
+          .filter((message: Model) => message.fromUser.id !== botId || message.text.includes('test'))
           .do((message: Model) => handleIncommingMessage(room, message))
       })
     )
@@ -49,25 +50,19 @@ Observable.fromPromise(gitter.currentUser())
   .subscribe();
 
 function handleIncommingMessage(room, message: Model) {
-
-  if (message.fromUser.id !== botId || message.text.includes('test')) {
-
-    let replyText = getReply(message.text);
-    if (!replyText) {
-      console.log('No reply sent')
-      return;
-    }
-    replyText = `@${message.fromUser.username}: ${replyText}`;
-    room.send(replyText);
-    console.log('Reply sent')
+  let replyText = getReply(message.text);
+  if (!replyText) {
+    console.log('No reply sent')
     return;
   }
-  console.log('Self message');
+  replyText = `@${message.fromUser.username}: ${replyText}`;
+  room.send(replyText);
+  console.log('Reply sent')
 }
 
 function getReply(text: string): string {
-  const textParts = text.toLowerCase().split(' ');
   text = text.toLowerCase();
+  const textParts = text.toLowerCase().split(' ');
   //globals
   if (text.includes('angular3') || text.includes('angular 3')) {
     return replies['angular3'];
