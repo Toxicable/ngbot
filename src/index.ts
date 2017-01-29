@@ -84,6 +84,9 @@ function getReply(text: string): string {
     if (text.includes('help')) { //personal message them
       return 'Replies you can ask me for: ' + Object.keys(replies).join(', ')
     }
+    if (text.includes('hello')) { //personal message them
+      return 'Hello!'
+    }
 
     if (text.includes('docs')) {
       return getDocsApiReply(text);
