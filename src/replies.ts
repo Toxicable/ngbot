@@ -11,5 +11,6 @@ export const replies = {
   'angularjs': `This room is for Angular (version 2+), please visit [here for AngularJS](https://gitter.im/angular/angular.js)`,
   'noStoredReply': `I'm Sorry, I don't have a reply for that, i'm not very smart but you can help make me better by [contributing](https://github.com/Toxicable/angular-gitter-replybot)`,
   'global': `Global dosen't exist in Angular's context, there is only scoping. For example if you have 2 Modules, Module1 and Module2, if you import an external Module that has a component: \`<spinner></spinner>\` it is only avilable in Module1, you will have to import it into Module2 to access it there, please see the [FAQ](https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html) for more information`
-//global
+
+//CORS
 }

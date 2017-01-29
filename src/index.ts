@@ -10,8 +10,7 @@ console.log('TOKEN: ' + process.env.TOKEN);
 console.log('NODE_ENV: ' + process.env.NODE_ENV);
 console.log('ROOMS: ' + process.env.ROOMS);
 
-const gitter = new Gitter(process.env.TOKEN)
-
+const gitter = new Gitter(process.env.TOKEN);
 const isProd = process.env.NODE_ENV === 'prod';
 
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
@@ -25,8 +24,8 @@ let botId = '';
 //this should the errors in the server logs
 var http = require("http");
 http.createServer(function (request, response) {
-   response.writeHead(200, {'Content-Type': 'text/plain'});
-   response.end('You\'re not really meant to be here');
+  response.writeHead(200, { 'Content-Type': 'text/plain' });
+  response.end('You\'re not really meant to be here');
 }).listen(8080);
 
 
@@ -58,7 +57,7 @@ Observable.fromPromise(gitter.currentUser())
       })
     )
   })
-  .subscribe(() => {}, error => console.log('ERROR: ' + error));
+  .subscribe(() => { }, error => console.log('ERROR: ' + error));
 
 function handleIncommingMessage(room, message: Model) {
   let replyText = getReply(message.text);
@@ -82,26 +81,36 @@ function getReply(text: string): string {
 
   if (text.startsWith(botKeyWord)) {
 
-    if (text.includes('help')) {
+    if (text.includes('help')) { //personal message them
       return 'Replies you can ask me for: ' + Object.keys(replies).join(', ')
     }
 
     if (text.includes('docs')) {
-      let matchedApi = apis.find(api => text.includes(api.title.toLowerCase()))
-
-      if (matchedApi) {
-        return docsApiBaseUrl + matchedApi.path;
-      }
+      return getDocsApiReply(text);
     }
 
-    const key = Object.keys(replies)
-      .find(key => key.toLowerCase()
-        .split(' ')
-        //check to see if each part of the users message is in the key
-        .every(part => text.includes(part))
-      );
+    return getStoredReply(text);
 
-    return key ? replies[key] : replies['noStoredReply'];
   }
+}
+
+function getStoredReply(message: string) {
+
+  const key = Object.keys(replies)
+    .find(key => key.toLowerCase()
+      .split(' ')
+      //check to see if each part of the users message is in the key
+      .every(part => message.includes(part))
+    );
+
+  return key ? replies[key] : replies['noStoredReply'];
+}
+
+function getDocsApiReply(message: string) {
+  let matchedApi = apis.find(api => message.includes(api.title.toLowerCase()))
+
+
+  return matchedApi ? docsApiBaseUrl + matchedApi.path : `Unable to find docs for: ${message}`;
+
 }
 console.log('Angie Started');
