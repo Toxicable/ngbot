@@ -20,7 +20,7 @@ const botKeyWord = "angie";
 const docsApiBaseUrl = 'https://angular.io/docs/ts/latest/api';
 const docsApiUrl = docsApiBaseUrl + '/api-list.json';
 
-const thottleThreshold = 500;/* ms */
+const thottleThreshold = 250;/* ms */
 let lastMessagePostedAt: number = null;
 
 let apis: Api[];
@@ -70,7 +70,7 @@ function handleIncommingMessage(room, message: Model) {
     console.log('No reply sent')
     return;
   }
-  //replyText = `@${message.fromUser.username}: ${replyText}`;
+  //replyText = ;
   replyText = isProd ? replyText : `DEBUG: ${replyText}`;
   let now = new Date().getTime();
   let timeSinceLastMessage = now - lastMessagePostedAt
@@ -97,7 +97,7 @@ function getReply(message: Model): string {
       return 'Replies you can ask me for: ' + Object.keys(replies).join(', ')
     }
     if (text.includes('hello')) { //personal message them
-      return 'Hello!'
+      return `@${message.fromUser.username}: Hello!`;
     }
 
     if (text.includes('docs')) {
