@@ -16,8 +16,13 @@ const isProd = process.env.NODE_ENV === 'prod';
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
 const roomNames = isProd ? process.env.ROOMS : 'angular-gitter-replybot/Lobby';
 const botKeyWord = "angie";
+
 const docsApiBaseUrl = 'https://angular.io/docs/ts/latest/api';
 const docsApiUrl = docsApiBaseUrl + '/api-list.json';
+
+const thottleThreshold = 500;/* ms */
+let lastMessagePostedAt: number = null;
+
 let apis: Api[];
 let botId = '';
 
@@ -60,19 +65,26 @@ Observable.fromPromise(gitter.currentUser())
   .subscribe(() => { }, error => console.log('ERROR: ' + error));
 
 function handleIncommingMessage(room, message: Model) {
-  let replyText = getReply(message.text);
+  let replyText = getReply(message);
   if (!replyText) {
     console.log('No reply sent')
     return;
   }
   //replyText = `@${message.fromUser.username}: ${replyText}`;
   replyText = isProd ? replyText : `DEBUG: ${replyText}`;
-  room.send(replyText);
-  console.log('Reply sent')
+  let now = new Date().getTime();
+  let timeSinceLastMessage = now - lastMessagePostedAt
+  if ( timeSinceLastMessage > thottleThreshold){
+    room.send(replyText);
+    let lastMessagePostedAt = now
+    console.log('Reply sent')
+  } else {
+    console.log(`Time Threshold hit, the last message was sent ${thottleThreshold} ago`)
+  }
 }
 
-function getReply(text: string): string {
-  text = text.toLowerCase();
+function getReply(message: Model): string {
+  let text = message.text.toLowerCase();
   const textParts = text.toLowerCase().split(' ');
   //globals
   if (text.includes('angular3') || text.includes('angular 3')) {
