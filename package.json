@@ -10,11 +10,14 @@
   "scripts": {
     "start": "node ./src/index.js",
     "build": "tsc",
-    "deploy": "npm run build && gcloud app deploy --stop-previous-version"
+    "deploy": "npm run build && gcloud app deploy --stop-previous-version",
+    "test": "jasmine-node spec"
   },
   "author": "Fabian Wiles",
   "license": "MIT",
   "dependencies": {
+    "@types/jasmine-node": "^1.14.30",
+    "jasmine-node": "^1.14.5",
     "node-gitter": "^2.0.5",
     "request": "^2.79.0",
     "rxjs": "^5.0.3",
