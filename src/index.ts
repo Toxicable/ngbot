@@ -1,9 +1,9 @@
-import { replies } from './replies';
-import { Message, User, Model } from './models/message';
-import { ApiModule, Api } from './models/api-docs-module';
-import { Observable } from 'rxjs';
-const request = require('request');
-const Gitter = require('node-gitter')
+import {replies} from './replies';
+import {Message, User, Model} from './models/message';
+import {ApiModule, Api} from './models/api-docs-module';
+import {Observable} from 'rxjs';
+import request = require('request');
+import Gitter = require('node-gitter');
 
 console.log('Enviroment Variables:');
 console.log('TOKEN: ' + process.env.TOKEN);
@@ -20,16 +20,17 @@ const botKeyWord = "angie";
 const docsApiBaseUrl = 'https://angular.io/docs/ts/latest/api';
 const docsApiUrl = docsApiBaseUrl + '/api-list.json';
 
-const thottleThreshold = 250;/* ms */
+const throttleThreshold = 250;
+/* ms */
 let lastMessagePostedAt: number = null;
 
 let apis: Api[];
 let botId = '';
 
 //this should the errors in the server logs
-var http = require("http");
+import http = require("http");
 http.createServer(function (request, response) {
-  response.writeHead(200, { 'Content-Type': 'text/plain' });
+  response.writeHead(200, {'Content-Type': 'text/plain'});
   response.end('You\'re not really meant to be here');
 }).listen(8080);
 
@@ -42,7 +43,7 @@ request(docsApiUrl, (error, response, body) => {
       //flatten out the modules into a single list of API's
       .reduce((a, b) => [...a, ...b], [])
   }
-})
+});
 
 
 Observable.fromPromise(gitter.currentUser())
@@ -62,30 +63,34 @@ Observable.fromPromise(gitter.currentUser())
       })
     )
   })
-  .subscribe(() => { }, error => console.log('ERROR: ' + error));
+  .subscribe(() => {
+  }, error => console.log('ERROR: ' + error));
+
 
 function handleIncommingMessage(room, message: Model) {
   let replyText = getReply(message);
   if (!replyText) {
-    console.log('No reply sent')
+    console.log('No reply sent');
     return;
   }
   //replyText = ;
   replyText = isProd ? replyText : `DEBUG: ${replyText}`;
   let now = new Date().getTime();
-  let timeSinceLastMessage = now - lastMessagePostedAt
-  if ( timeSinceLastMessage > thottleThreshold){
+  let timeSinceLastMessage = now - lastMessagePostedAt;
+  if (timeSinceLastMessage > throttleThreshold) {
     room.send(replyText);
-    let lastMessagePostedAt = now
+    let lastMessagePostedAt = now;
     console.log('Reply sent')
   } else {
-    console.log(`Time Threshold hit, the last message was sent ${thottleThreshold} ago`)
+    console.log(`Time Threshold hit, the last message was sent ${throttleThreshold} ago`)
   }
 }
+
 
 function getReply(message: Model): string {
   let text = message.text.toLowerCase();
   const textParts = text.toLowerCase().split(' ');
+
   //globals
   if (text.includes('angular3') || text.includes('angular 3')) {
     return replies['angular3'];
@@ -109,6 +114,7 @@ function getReply(message: Model): string {
   }
 }
 
+
 function getStoredReply(message: string) {
 
   const key = Object.keys(replies)
@@ -121,11 +127,10 @@ function getStoredReply(message: string) {
   return key ? replies[key] : replies['noStoredReply'];
 }
 
-function getDocsApiReply(message: string) {
-  let matchedApi = apis.find(api => message.includes(api.title.toLowerCase()))
 
+function getDocsApiReply(message: string) {
+  let matchedApi = apis.find(api => message.includes(api.title.toLowerCase()));
 
   return matchedApi ? docsApiBaseUrl + matchedApi.path : `Unable to find docs for: ${message}`;
-
 }
 console.log('Angie Started');

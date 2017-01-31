@@ -1,7 +1,7 @@
-export interface ApiModule{
+export interface ApiModule {
   [key: string]: Api[];
 }
-export interface Api{
+export interface Api {
   title: string,
   path: string;
   docType: string;
