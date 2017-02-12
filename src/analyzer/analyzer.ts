@@ -22,10 +22,16 @@ interface AnalysisResults {
 }
 
 function isUppercase(character: string): boolean {
+  if (character == null) {
+    return false;
+  }
   return character == character.toUpperCase();
 }
 
 function isLowerCase(character: string): boolean {
+  if (character == null) {
+    return false;
+  }
   return character == character.toLowerCase();
 }
 
