@@ -1,6 +1,15 @@
 import fs = require('fs');
 import cheerio = require('cheerio');
 
+function escape(text: string): string {
+  return text
+    .replace(/\n/g, '\\n')
+    .replace(/\t/g, '\\t')
+    .replace(/</g, '&lt;')
+    .replace(/"/g, '""')
+    ;
+}
+
 import {Analyzer} from '../src/analyzer/analyzer';
 
 const archiveString: string =
@@ -11,7 +20,11 @@ const messages: string[] =
   <any>Array.from($('.chat-app .chat-item__text').map((i, el) => $(el).text().trim()));
 
 const analyzer = new Analyzer();
-const stats = messages.map(message => Object.assign({message}, analyzer.analyze(message)));
+const stats = messages.map(message => {
+  return Object.assign({message: escape(message)}, analyzer.analyze(message));
+});
+
+stats.sort((a, b) => a.numberOfWordsInCamelCase < b.numberOfWordsInCamelCase ? 1 : -1);
 
 function jsonToTable(json: {[key: string]: any}[]): {headers: string[], data: any[][]} {
   const headers: string[] = Object.keys(json[0]);
@@ -44,4 +57,12 @@ function tableToHtml(table: {headers: string[], data: any[][]}): string {
   return html;
 }
 
+function tableToCsv(table: {headers: string[], data: any[][]}): string {
+  let csv = ``;
+  csv += table.headers.join(',') + `\n`;
+  csv += table.data.map(row => row.map(cell => `"${cell}"`).join(`,`)).join(`\n`);
+  return csv;
+}
+
 fs.writeFileSync(__dirname + '/archives/stats.html', tableToHtml(jsonToTable(stats)));
+fs.writeFileSync(__dirname + '/archives/stats.csv', tableToCsv(jsonToTable(stats)));
