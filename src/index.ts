@@ -14,11 +14,13 @@ const gitter = new Gitter(process.env.TOKEN);
 const isProd = process.env.NODE_ENV === 'prod';
 
 //the default id for for the https://gitter.im/angular-gitter-replybot/Lobby chat room for dev
-const roomNames = isProd ? process.env.ROOMS : 'angular-gitter-replybot/Lobby';
+const roomNames = isProd ? process.env.ROOMS : 'angular-gitter-replybot/Lobby,angular/angular';
 const botKeyWord = "angie";
 
 const docsApiBaseUrl = 'https://angular.io/docs/ts/latest/api';
 const docsApiUrl = docsApiBaseUrl + '/api-list.json';
+
+
 
 const throttleThreshold = 250;
 /* ms */
@@ -34,6 +36,16 @@ http.createServer(function (request, response) {
   response.end('You\'re not really meant to be here');
 }).listen(8080);
 
+
+request(docsApiUrl, (error, response, body) => {
+  if (!error && response.statusCode == 200) {
+    const apiModules: ApiModule = JSON.parse(body);
+    apis = Object.keys(apiModules)
+      .map(key => apiModules[key])
+      //flatten out the modules into a single list of API's
+      .reduce((a, b) => [...a, ...b], [])
+  }
+});
 
 request(docsApiUrl, (error, response, body) => {
   if (!error && response.statusCode == 200) {
@@ -96,16 +108,16 @@ function getReply(message: Model): string {
     return replies['angular3'];
   }
 
-  if (text.startsWith(botKeyWord)) {
+  if (getTextPart(textParts, 0) === 'angie') {
 
     if (text.includes('help')) { //personal message them
-      return 'Replies you can ask me for: ' + Object.keys(replies).join(', ')
+      return 'Topics you can ask me about:' + Object.keys(replies).join(', ') + '. You can also as me for links to the docs with `angie docs`'
     }
     if (text.includes('hello')) { //personal message them
       return `@${message.fromUser.username}: Hello!`;
     }
 
-    if (text.includes('docs')) {
+    if (getTextPart(textParts, 1) === 'docs') {
       return getDocsApiReply(text);
     }
 
@@ -114,8 +126,12 @@ function getReply(message: Model): string {
   }
 }
 
+export function getTextPart(text: string[], index: number){
+  return text.length > index ? text[index] : null;
+}
 
-function getStoredReply(message: string) {
+
+export function getStoredReply(message: string) {
 
   const key = Object.keys(replies)
     .find(key => key.toLowerCase()
@@ -128,9 +144,22 @@ function getStoredReply(message: string) {
 }
 
 
-function getDocsApiReply(message: string) {
+export function getDocsApiReply(message: string) {
   let matchedApi = apis.find(api => message.includes(api.title.toLowerCase()));
 
-  return matchedApi ? docsApiBaseUrl + matchedApi.path : `Unable to find docs for: ${message}`;
+  return matchedApi ? docsApiBaseUrl + '/' +  matchedApi.path : `Unable to find docs for: ${message}`;
 }
+
+export function getApiVersions(){
+  request(docsApiUrl, (error, response, body) => {
+  if (!error && response.statusCode == 200) {
+    const apiModules: ApiModule = JSON.parse(body);
+    apis = Object.keys(apiModules)
+      .map(key => apiModules[key])
+      //flatten out the modules into a single list of API's
+      .reduce((a, b) => [...a, ...b], [])
+  }
+});
+}
+
 console.log('Angie Started');
