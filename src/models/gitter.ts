@@ -1,3 +1,21 @@
+export interface GitterClient {
+  currentUser(): Promise<User>;
+  rooms: RoomClient;
+}
+export interface RoomClient{
+  join(roomName: string): Promise<Room>
+}
+export interface Room {
+  streaming(): Stream
+  send(message: string): void;
+  name: string;
+}
+
+export interface Stream{
+  chatMessages(): EventTarget;
+}
+
+
 export interface Message {
   operation: string;
   model: Model;
