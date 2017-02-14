@@ -11,7 +11,7 @@ export class Angie {
   private botKeyWord = 'angie';
   private lastMessagePostedAt: number = null;
   private replies: string[];
-  private apis: Api[];
+  private api: Api[];
 
   constructor(
     private token: string,
