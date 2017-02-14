@@ -226,7 +226,11 @@ export class Analyzer {
   }
 
   public isCode(text: string, weights: AnalysisWeights = WEIGHTS): boolean {
-    return this.getScore(text, weights) > 0.025;
+    const score =  this.getScore(text, weights);
+    // console.log(`\n=== === === ===`);
+    // console.log(text, 'SCORE IS', score);
+    // console.log(`=== === === ===`);
+    return score > 0.02;
   }
 
 }

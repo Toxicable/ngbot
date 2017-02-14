@@ -1,12 +1,13 @@
 import {Analyzer} from '../src/analyzer/analyzer';
+import {getTextOutsideCodeBlocks} from '../src/util/formatting';
 
 function isBetween(a: number, b: number): (value: number) => boolean {
   return value => a <= value && value < b;
 }
 
-describe(`Analyzer`, () => {
+const aly = new Analyzer();
 
-  const aly = new Analyzer();
+describe(`Analyzer :: Analysis results`, () => {
 
   it(`should analyze "The quick brown fox jumps over the lazy dog"`, () => {
     const text = 'The quick brown fox jumps over the lazy dog';
@@ -61,6 +62,63 @@ describe(`Analyzer`, () => {
 
     expect(analysis.camelCase).toEqual(1);
     // expect(analysis.numberOfWordsInUnderscoreCase).toEqual(0);
+  });
+
+});
+
+describe(`Analysis :: Is code or not?`, () => {
+
+  it(`Single line, not code`, () => {
+    const foxesAreLazy = `This quick brown dog runs over the lazy fox`;
+    const isCode: boolean = aly.isCode(getTextOutsideCodeBlocks(foxesAreLazy));
+    expect(isCode).toBe(false);
+  });
+
+  it(`Single line, code`, () => {
+    const msg = `const strippedTokens = tokens.filter(token => token.type != 'code');`;
+    const isCode: boolean = aly.isCode(getTextOutsideCodeBlocks(msg));
+    expect(isCode).toBe(false);
+  });
+
+  it(`Four lines, one is code and is properly formatted`, () => {
+    const msg = `This is line one and it is not code.
+Ditto for the second line.
+\`\`\`
+this.isAProperly(formatted => line(of, code))
+\`\`\`
+Final line.`;
+    const isCode: boolean = aly.isCode(getTextOutsideCodeBlocks(msg));
+    expect(isCode).toBe(false);
+  });
+
+  it(`Four lines, one is unformatted code`, () => {
+    const msg = `This is line one and it is not code.
+Ditto for the second line.
+this.isNotProperly(formatted => line(of, code))
+Final line.`;
+    const isCode: boolean = aly.isCode(getTextOutsideCodeBlocks(msg));
+    expect(isCode).toBe(false); // dunno
+  });
+
+  it(`Four lines, all are unformatted code`, () => {
+    const msg = `const tokens = marked.lexer(message);
+const strippedTokens = tokens.filter(token => token.type != 'code');
+const html = marked.parser(strippedTokens);
+const tokens = marked.lexer(message);`;
+    const isCode: boolean = aly.isCode(getTextOutsideCodeBlocks(msg));
+    expect(isCode).toBe(true);
+  });
+
+  it(`Seven lines, four are unformatted code`, () => {
+    const msg = `This is line one and it is not code.
+Ditto for the second line.
+this.isNotProperly(formatted => line(of, code));
+const tokens = marked.lexer(message);
+const strippedTokens = tokens.filter(token => token.type != 'code');
+const html = marked.parser(strippedTokens);
+Final line.`;
+    const isCode: boolean = aly.isCode(getTextOutsideCodeBlocks(msg));
+    expect(isCode).toBe(true);
   });
 
 });
