@@ -1,54 +1,59 @@
+import {
+  getNumberOfRegexMatches, isUppercase, isLowerCase, curryPercent,
+  weightedAverage
+} from './utils';
+
+interface AnalysisWeights {
+  curlyBraces: number;
+  squareBrackets: number;
+  roundParenthesis: number;
+
+  semiColons: number;
+  semiColonsBeforeLineEnding: number;
+
+  dotsWithoutSpaceAfter: number;
+  uncommonCharacterSequences: number;
+
+  camelCase: number;
+}
+
+export const WEIGHTS: AnalysisWeights = {
+  curlyBraces: 10,
+  squareBrackets: 9,
+  roundParenthesis: 5,
+
+  semiColons: 7,
+  semiColonsBeforeLineEnding: 10,
+
+  dotsWithoutSpaceAfter: 10,
+  uncommonCharacterSequences: 10,
+
+  camelCase: 6,
+};
+
 interface AnalysisResults {
-  numberOfCharacters: number; // with ''
-  numberOfWords: number; // with \b
-  numberOfLines: number; // with \n
-  numberOfCharactersPerLine: number[]; // for each line
+  characters: number; // with ''
+  words: number; // with \b
+  lines: number; // with \n
+
+  charactersPerLine: number[]; // for each line
   averageCharactersPerLine: number; // average of above
-  numberOfWordsPerLine: number[]; // for each line
+
+  wordsPerLine: number[]; // for each line
   averageWordsPerLine: number; // average of above
 
-  numberOfSemiColons: number; // some; stuff; here
-  numberOfSemiColonsBeforeLineEnding: number; // foo;
+  semiColons: number; // some; stuff; here
+  semiColonsBeforeLineEnding: number; // foo;
 
-  numberOfCurlyBraces: number; // {}
-  numberOfSquareBrackets: number; // []
-  numberOfRoundParenthesis: number; // ()
+  curlyBraces: number; // {}
+  squareBrackets: number; // []
+  roundParenthesis: number; // ()
 
-  numberOfDotsWithoutSpaceAfter: number; // foo.bar
-  numberOfUncommonCharacterSequences: number; // +, *, &, |, <, >, ==, ===, !=, !==, >=, <=, =>
+  dotsWithoutSpaceAfter: number; // foo.bar
+  uncommonCharacterSequences: number; // +, *, &, |, <, >, ==, ===, !=, !==, >=, <=, =>
 
-  numberOfWordsInCamelCase: number; // camelCase
-  numberOfWordsInUnderscoreCase: number; // under_score_case
-}
-
-function isUppercase(character: string): boolean {
-  if (character == null) {
-    return false;
-  }
-  return character == character.toUpperCase();
-}
-
-function isLowerCase(character: string): boolean {
-  if (character == null) {
-    return false;
-  }
-  return character == character.toLowerCase();
-}
-
-function isLetter(character: string): boolean {
-  return character.match(/[a-z]/i).length != 0;
-}
-
-function getNumberOfRegexMatches(text: string, regex: RegExp): number {
-  if (text == null) {
-    return 0;
-  }
-  const matches = text.match(regex);
-  if (matches == null) {
-    return 0;
-  } else {
-    return matches.length;
-  }
+  camelCase: number; // camelCase
+  underscoreCase: number; // under_score_case
 }
 
 export class Analyzer {
@@ -135,41 +140,93 @@ export class Analyzer {
   }
 
   public analyze(text: string): AnalysisResults {
-    const numberOfCharacters = this.getNumberOfCharacters(text);
-    const numberOfWords = this.getNumberOfWords(text);
-    const numberOfLines = this.getNumberOfLines(text);
-    const numberOfCharactersPerLine = this.getNumberOfCharactersPerLine(text);
+    const characters = this.getNumberOfCharacters(text);
+    const words = this.getNumberOfWords(text);
+    const lines = this.getNumberOfLines(text);
+    const charactersPerLine = this.getNumberOfCharactersPerLine(text);
     const averageCharactersPerLine = this.getAverageCharactersPerLine(text);
-    const numberOfWordsPerLine = this.getNumberOfWordsPerLine(text);
+    const wordsPerLine = this.getNumberOfWordsPerLine(text);
     const averageWordsPerLine = this.getAverageWordsPerLine(text);
-    const numberOfSemiColons = this.getNumberOfSemiColons(text);
-    const numberOfSemiColonsBeforeLineEnding = this.getNumberOfSemiColonsBeforeLineEnding(text);
-    const numberOfCurlyBraces = this.getNumberOfCurlyBraces(text);
-    const numberOfSquareBrackets = this.getNumberOfSquareBrackets(text);
-    const numberOfRoundParenthesis = this.getNumberOfRoundParenthesis(text);
-    const numberOfDotsWithoutSpaceAfter = this.getNumberOfDotsWithoutSpaceAfter(text);
-    const numberOfUncommonCharacterSequences = this.getNumberOfUncommonCharacterSequences(text);
-    const numberOfWordsInUnderscoreCase = this.getNumberOfWordsInUnderscoreCase(text);
-    const numberOfWordsInCamelCase = this.getNumberOfWordsInCamelCase(text);
+    const semiColons = this.getNumberOfSemiColons(text);
+    const semiColonsBeforeLineEnding = this.getNumberOfSemiColonsBeforeLineEnding(text);
+    const curlyBraces = this.getNumberOfCurlyBraces(text);
+    const squareBrackets = this.getNumberOfSquareBrackets(text);
+    const roundParenthesis = this.getNumberOfRoundParenthesis(text);
+    const dotsWithoutSpaceAfter = this.getNumberOfDotsWithoutSpaceAfter(text);
+    const uncommonCharacterSequences = this.getNumberOfUncommonCharacterSequences(text);
+    const underscoreCase = this.getNumberOfWordsInUnderscoreCase(text);
+    const camelCase = this.getNumberOfWordsInCamelCase(text);
+
     const analysisResults: AnalysisResults = {
-      numberOfCharacters,
-      numberOfWords,
-      numberOfLines,
-      numberOfCharactersPerLine,
+      characters,
+      words,
+      lines,
+      charactersPerLine,
       averageCharactersPerLine,
-      numberOfWordsPerLine,
+      wordsPerLine,
       averageWordsPerLine,
-      numberOfSemiColons,
-      numberOfSemiColonsBeforeLineEnding,
-      numberOfCurlyBraces,
-      numberOfSquareBrackets,
-      numberOfRoundParenthesis,
-      numberOfDotsWithoutSpaceAfter,
-      numberOfUncommonCharacterSequences,
-      numberOfWordsInUnderscoreCase,
-      numberOfWordsInCamelCase,
+      semiColons,
+      semiColonsBeforeLineEnding,
+      curlyBraces,
+      squareBrackets,
+      roundParenthesis,
+      dotsWithoutSpaceAfter,
+      uncommonCharacterSequences,
+      underscoreCase,
+      camelCase,
     };
+
     return analysisResults;
+  }
+
+  public normalizeAnalysis(analysis: AnalysisResults): AnalysisResults {
+    const charactersPercent = curryPercent(analysis.characters);
+    const wordsPercent = curryPercent(analysis.words);
+
+    return {
+      characters: 1,
+      words: 1,
+      lines: 1,
+      charactersPerLine: analysis.charactersPerLine.map(v => v / analysis.lines),
+      averageCharactersPerLine: curryPercent(analysis.lines)(analysis.averageCharactersPerLine),
+      wordsPerLine: analysis.wordsPerLine.map(v => v / analysis.lines),
+      averageWordsPerLine: curryPercent(analysis.lines)(analysis.averageWordsPerLine),
+      semiColons: charactersPercent(analysis.semiColons),
+      semiColonsBeforeLineEnding: charactersPercent(analysis.semiColonsBeforeLineEnding),
+      curlyBraces: charactersPercent(analysis.curlyBraces),
+      squareBrackets: charactersPercent(analysis.squareBrackets),
+      roundParenthesis: charactersPercent(analysis.roundParenthesis),
+      dotsWithoutSpaceAfter: wordsPercent(analysis.dotsWithoutSpaceAfter),
+      uncommonCharacterSequences: charactersPercent(analysis.uncommonCharacterSequences),
+      camelCase: wordsPercent(analysis.camelCase),
+      underscoreCase: wordsPercent(analysis.underscoreCase),
+    }
+  }
+
+  public getScore(text: string, weights: AnalysisWeights = WEIGHTS): number {
+    // filtering out nonsense
+    if (text == null || text.trim() == '') {
+      return 0;
+    }
+
+    const analysis: AnalysisResults = this.analyze(text);
+    const normalizedAnalysis: AnalysisResults = this.normalizeAnalysis(analysis);
+
+    // filtering out very short messages
+    if (!analysis.charactersPerLine.some(n => n > 400) && analysis.lines <= 3) {
+      return 0;
+    }
+
+    const keys: string[] = Object.keys(weights);
+
+    const weightsArray: number[] = keys.map(key => weights[key]);
+    const scoresArray: number[] = keys.map(key => normalizedAnalysis[key]);
+
+    return weightedAverage(weightsArray, scoresArray);
+  }
+
+  public isCode(text: string, weights: AnalysisWeights = WEIGHTS): boolean {
+    return this.getScore(text, weights) > 0.025;
   }
 
 }

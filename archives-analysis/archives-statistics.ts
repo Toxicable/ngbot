@@ -21,10 +21,14 @@ const messages: string[] =
 
 const analyzer = new Analyzer();
 const stats = messages.map(message => {
-  return Object.assign({message: escape(message)}, analyzer.analyze(message));
+  return Object.assign(
+    {message: escape(message)},
+    {score: analyzer.getScore(message)},
+    analyzer.analyze(message)
+  );
 });
 
-stats.sort((a, b) => a.numberOfWordsInCamelCase < b.numberOfWordsInCamelCase ? 1 : -1);
+stats.sort((a, b) => a.score < b.score ? 1 : -1);
 
 function jsonToTable(json: {[key: string]: any}[]): {headers: string[], data: any[][]} {
   const headers: string[] = Object.keys(json[0]);
