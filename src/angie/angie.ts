@@ -2,6 +2,7 @@ import { ReplyClient } from './../reply-client';
 import { Observable, Subscription } from 'rxjs';
 import { Http } from '../util/http';
 import { GitterClient, Message, Model, User, Room } from './gitter';
+import { getTextPart } from '../util/cli-helper';
 import * as Gitter from 'node-gitter';
 
 export class Angie {
@@ -68,28 +69,24 @@ export class Angie {
     const textParts = text.split(' ');
 
     //globals
-    const globalReply = this.clients.map(c => c.getGlobal(text)).filter(obs => !!obs);
+    const globalReply = this.clients.map(c => c.getGlobal(message)).filter(obs => !!obs);
     if (globalReply.length > 0) {
       return globalReply[0];
     }
 
 
-    if (this.getTextPart(textParts, 0) === 'angie') {
+    if (getTextPart(textParts, 0) === 'angie') {
 
 
       if (text.includes('hello')) { //personal message them
         return `@${message.fromUser.username}: Hello!`;
       }
 
-      const reply = this.clients.map(c => c.getReply(text)).filter(obs => !!obs);
+      const reply = this.clients.map(c => c.getReply(message)).filter(obs => !!obs);
       if (reply.length > 0) {
         return reply[0];
       }
 
     }
-  }
-
-  private getTextPart(text: string[], index: number) {
-    return text.length > index ? text[index] : null;
   }
 }

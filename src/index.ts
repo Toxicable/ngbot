@@ -1,5 +1,6 @@
+import { AnalyzerClient } from './analyzer/analyzer.client';
 import { StoredReplyClient } from './stored-replies/stored-replies.client';
-import { Docs, DocsClient } from './docs/docs.client';
+import { DocsClient } from './docs/docs.client';
 import { Angie } from './angie/angie';
 import * as http from 'http';
 
@@ -15,7 +16,11 @@ const roomNames: string = isProd ? process.env.ROOMS : 'angular-gitter-replybot/
 
 
 const throttleThreshold = 250;
-const clients = [ new DocsClient(), new StoredReplyClient()]
+const clients = [
+  new DocsClient(),
+  new StoredReplyClient(),
+  new AnalyzerClient(),
+  ]
 
 const bots = roomNames.split(",")
   .map(roomName => new Angie(process.env.TOKEN, roomName, isProd, clients))

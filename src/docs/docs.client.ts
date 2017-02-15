@@ -1,7 +1,9 @@
+import { Model } from './../angie/gitter';
 import { ReplyClient } from './../reply-client';
 import { ApiModule, Api } from './api-docs-module';
 import { Http } from './../util/http';
 import { Observable } from 'rxjs';
+import { getTextPart } from '../util/cli-helper';
 
 export class DocsClient implements ReplyClient {
 
@@ -20,14 +22,20 @@ export class DocsClient implements ReplyClient {
     });
   }
 
-  getGlobal(message: string){
+  getGlobal(message: Model) {
     return null;
   }
 
-  getReply(message: string) {
-    let matchedApi = this.apis.find(api => message.includes(api.title.toLowerCase()));
+  getReply(message: Model) {
+    const text = message.text;
+    const messageParts = text.split(' ')
 
-    const reply = matchedApi ? this.docsApiUrl + '/' + matchedApi.path : `Unable to find docs for: ${message}`;
-    return reply;
+    if (getTextPart(messageParts, 1) === 'docs') {
+
+      let matchedApi = this.apis.find(api => text.includes(api.title.toLowerCase()));
+
+      const reply = matchedApi ? this.docsApiUrl + '/' + matchedApi.path : `Unable to find docs for: ${message}`;
+      return reply;
+    }
   }
 }
