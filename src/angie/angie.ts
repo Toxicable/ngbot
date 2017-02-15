@@ -1,7 +1,7 @@
 import {ReplyClient} from '../reply-client';
 import {Observable, Subscription} from 'rxjs';
 import {Http} from '../util/http';
-import {GitterClient, Message, Model, User, Room} from './gitter';
+import {GitterClient, Message, MessageModel, User, Room} from './gitter';
 import {getTextPart} from '../util/cli-helper';
 import * as Gitter from 'node-gitter';
 
@@ -44,7 +44,7 @@ export class Angie {
   }
 
 
-  handleIncomingMessage(room: Room, message: Model) {
+  handleIncomingMessage(room: Room, message: MessageModel) {
     let replyText = this.getReply(message);
 
     if (!replyText) {
@@ -65,7 +65,7 @@ export class Angie {
   }
 
 
-  getReply(message: Model): string {
+  getReply(message: MessageModel): string {
     let text = message.text.toLowerCase();
     const textParts = text.split(' ');
 

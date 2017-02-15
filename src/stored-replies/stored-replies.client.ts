@@ -1,4 +1,4 @@
-import {Model} from '../angie/gitter';
+import {MessageModel} from '../angie/gitter';
 import {replies} from './replies';
 import {ReplyClient} from '../reply-client';
 
@@ -11,7 +11,7 @@ export class StoredReplyClient implements ReplyClient {
     this.replies = replies;
   }
 
-  getGlobal(message: Model) {
+  getGlobal(message: MessageModel) {
     const text = message.text;
     if (text.includes('angular3') || text.includes('angular 3')) {
       return this.replies['angular3'];
@@ -19,7 +19,7 @@ export class StoredReplyClient implements ReplyClient {
     return null;
   }
 
-  getReply(message: Model): string {
+  getReply(message: MessageModel): string {
     const text = message.text;
 
     if (text.includes('help')) { //personal message them

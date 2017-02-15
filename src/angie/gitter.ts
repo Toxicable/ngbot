@@ -23,22 +23,23 @@ export interface Stream {
 
 export interface Message {
   operation: string;
-  model: Model;
+  model: MessageModel;
 }
 
 
-export interface Model {
+export interface MessageModel {
   id: string;
   text: string;
   html: string;
   sent: string;
+  editedAt: string;
   fromUser: User;
   unread: boolean;
-  readyBy: number;
+  readBy: number;
   urls: string[];
   mentions: any[];
   issues: any[];
-  meta: any[];
+  meta: any;
   v: number;
 }
 
@@ -48,9 +49,9 @@ export interface User {
   username: string;
   displayName: string;
   url: string;
-  avatarUrl: string;
+  // avatarUrl: string;
   avatarUrlSmall: string;
   avatarUrlMedium: string;
-  v: number;
-  gv: string;
+  // v: number;
+  // gv: string;
 }

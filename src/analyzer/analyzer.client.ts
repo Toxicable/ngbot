@@ -1,5 +1,5 @@
 import {MessageBuilder} from '../util/message-builder';
-import {Model} from '../angie/gitter';
+import {MessageModel} from '../angie/gitter';
 import {ReplyClient} from '../reply-client';
 import {Analyzer} from './analyzer';
 import {getTextOutsideCodeBlocks} from '../util/formatting';
@@ -10,11 +10,11 @@ export class AnalyzerClient implements ReplyClient {
               private mb = new MessageBuilder()) {
   }
 
-  getReply(message: Model) {
+  getReply(message: MessageModel) {
     return null;
   }
 
-  getGlobal(message: Model) {
+  getGlobal(message: MessageModel) {
     const isCode = this.analyzer.isCode(getTextOutsideCodeBlocks(message.text));
     if (isCode) {
       return this.mb
