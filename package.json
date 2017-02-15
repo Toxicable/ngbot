@@ -11,6 +11,7 @@
     "start": "node ./src/index.js",
     "build": "tsc",
     "deploy": "npm run build && gcloud app deploy --stop-previous-version",
+    "clean": "rimraf src/**/*.js && rimraf src/**/*.map",
     "test": "jasmine-node spec"
   },
   "author": "Fabian Wiles",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^7.0.4",
-    "tslint": "^4.4.1"
+    "tslint": "^4.4.1",
+    "rimraf": "^2.5.4"
   }
 }

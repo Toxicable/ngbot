@@ -1,7 +1,7 @@
+import { ReplyClient } from './../reply-client';
 import { Observable, Subscription } from 'rxjs';
-import { Http } from './http';
-import { GitterClient, Message, Model, User, Room } from '../models/gitter';
-import { ApiModule, Api } from '../models/api-docs-module';
+import { Http } from '../util/http';
+import { GitterClient, Message, Model, User, Room } from './gitter';
 import * as Gitter from 'node-gitter';
 
 export class Angie {
@@ -10,14 +10,13 @@ export class Angie {
   private gitterSub: Subscription;
   private botKeyWord = 'angie';
   private lastMessagePostedAt: number = null;
-  private replies: string[];
-  private apis: Api[];
+
 
   constructor(
     private token: string,
     private roomName: string,
-    private docsApiUrl: string,
     private isProd: boolean,
+    private clients: ReplyClient[],
     private throttleThreshold = 250,
     private http = new Http(),
     private gitter: GitterClient = new Gitter(token),
@@ -43,21 +42,9 @@ export class Angie {
       error => console.log('ERROR: ' + error));
   }
 
-
-
-  docs() {
-    this.http.get<ApiModule>(this.docsApiUrl).subscribe(docs => {
-      this.apis = Object.keys(docs)
-        .map(key => docs[key])
-        //flatten out the modules into a single list of API's
-        .reduce((a, b) => [...a, ...b], [])
-    });
-  }
-
-
-
   handleIncommingMessage(room: Room, message: Model) {
-    let replyText = this.getReply(message);
+    let replyText = this.getReply(message)
+
     if (!replyText) {
       console.log('No reply sent');
       return;
@@ -81,24 +68,23 @@ export class Angie {
     const textParts = text.split(' ');
 
     //globals
-    if (text.includes('angular3') || text.includes('angular 3')) {
-      return this.replies['angular3'];
+    const globalReply = this.clients.map(c => c.getGlobal(text)).filter(obs => !!obs);
+    if (globalReply.length > 0) {
+      return globalReply[0];
     }
+
 
     if (this.getTextPart(textParts, 0) === 'angie') {
 
-      if (text.includes('help')) { //personal message them
-        return 'Topics you can ask me about:' + Object.keys(this.replies).join(', ') + '. You can also as me for links to the docs with `angie docs`'
-      }
+
       if (text.includes('hello')) { //personal message them
         return `@${message.fromUser.username}: Hello!`;
       }
 
-      if (this.getTextPart(textParts, 1) === 'docs') {
-        return this.getDocsApiReply(text);
+      const reply = this.clients.map(c => c.getReply(text)).filter(obs => !!obs);
+      if (reply.length > 0) {
+        return reply[0];
       }
-
-      return this.getStoredReply(text);
 
     }
   }
@@ -106,25 +92,4 @@ export class Angie {
   private getTextPart(text: string[], index: number) {
     return text.length > index ? text[index] : null;
   }
-
-
-  private getStoredReply(message: string) {
-
-    const key = Object.keys(this.replies)
-      .find(key => key.toLowerCase()
-        .split(' ')
-        //check to see if each part of the users message is in the key
-        .every(part => message.includes(part))
-      );
-
-    return key ? this.replies[key] : this.replies['noStoredReply'];
-  }
-
-
-  private getDocsApiReply(message: string) {
-    let matchedApi = this.apis.find(api => message.includes(api.title.toLowerCase()));
-
-    return matchedApi ? this.docsApiUrl + '/' + matchedApi.path : `Unable to find docs for: ${message}`;
-  }
-
 }
