@@ -30,6 +30,15 @@ export class DocsClient implements ReplyClient {
       .reduce((a, b) => [...a, ...b], []);
   }
 
+  private formatApiToMessage(api: Api): string {
+    const title = api.title;
+    const link = `${this.docsApiUrl}/${api.path}`;
+    const type = api.docType;
+    const stableString = api.stability == 'stable' ? 'stable' : 'unstable';
+    const barrel = api.barrel;
+    return `[\`${title}\`](${link}) is a **${type}** found in \`${barrel}\` and is considered ${stableString}.`;
+  }
+
   getGlobal(message: MessageModel) {
     return null;
   }
@@ -45,7 +54,7 @@ export class DocsClient implements ReplyClient {
 
       let reply: string;
       if (matchedApi) {
-        reply = `${this.docsApiUrl}/${matchedApi.path}`;
+        reply = this.formatApiToMessage(matchedApi);
       } else {
         reply = `Unable to find docs for: ${messageParts.slice(2).join(' ')}`;
       }
