@@ -54,9 +54,9 @@ describe(`Docs Client`, () => {
   it(`should get docs for an existing entry`, () => {
     Object.assign(dummyMessage, {text: 'angie docs AsyncPipe'});
     const actual = client.getReply(dummyMessage);
-    const expected = `[\`AsyncPipe\`](https://angular.io/docs/ts/latest/api/api-list.json` +
-      `/common/index/AsyncPipe-pipe.html) is a **pipe** found in \`@angular/common\` and ` +
-      `is considered stable.`;
+    const expected = `***[\`AsyncPipe\`](https://angular.io/docs/ts/latest/api/api-list.json` +
+      `/common/index/AsyncPipe-pipe.html)*** is a **pipe** found in \`@angular/common\` and ` +
+      `is considered *stable*.`;
     expect(actual).toEqual(expected);
   });
 
