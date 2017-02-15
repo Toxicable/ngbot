@@ -1,5 +1,8 @@
 import {
-  getNumberOfRegexMatches, isUppercase, isLowerCase, curryPercent,
+  getNumberOfRegexMatches,
+  isUppercase,
+  isLowerCase,
+  curryPercent,
   weightedAverage
 } from './utils';
 
@@ -226,7 +229,7 @@ export class Analyzer {
   }
 
   public isCode(text: string, weights: AnalysisWeights = WEIGHTS): boolean {
-    const score =  this.getScore(text, weights);
+    const score = this.getScore(text, weights);
     // console.log(`\n=== === === ===`);
     // console.log(text, 'SCORE IS', score);
     // console.log(`=== === === ===`);

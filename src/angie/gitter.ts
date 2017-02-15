@@ -2,16 +2,21 @@ export interface GitterClient {
   currentUser(): Promise<User>;
   rooms: RoomClient;
 }
-export interface RoomClient{
+
+
+export interface RoomClient {
   join(roomName: string): Promise<Room>
 }
+
+
 export interface Room {
   streaming(): Stream
   send(message: string): void;
   name: string;
 }
 
-export interface Stream{
+
+export interface Stream {
   chatMessages(): EventTarget;
 }
 
@@ -20,6 +25,8 @@ export interface Message {
   operation: string;
   model: Model;
 }
+
+
 export interface Model {
   id: string;
   text: string;
@@ -34,6 +41,8 @@ export interface Model {
   meta: any[];
   v: number;
 }
+
+
 export interface User {
   id: string;
   username: string;
@@ -43,5 +52,5 @@ export interface User {
   avatarUrlSmall: string;
   avatarUrlMedium: string;
   v: number;
-  gv: string
+  gv: string;
 }

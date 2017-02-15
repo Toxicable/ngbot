@@ -1,6 +1,7 @@
 import { Observable, Observer } from 'rxjs';
 import * as request from 'request';
 
+
 export class Http {
 
   get<T>(url): Observable<T> {
@@ -10,9 +11,10 @@ export class Http {
           observer.next(JSON.parse(body));
           observer.complete();
         } else {
-          observer.error(error)
+          observer.error(error);
         }
       });
     });
   }
+
 }

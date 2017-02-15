@@ -1,10 +1,10 @@
-import { AnalyzerClient } from './analyzer/analyzer.client';
-import { StoredReplyClient } from './stored-replies/stored-replies.client';
-import { DocsClient } from './docs/docs.client';
-import { Angie } from './angie/angie';
+import {AnalyzerClient} from './analyzer/analyzer.client';
+import {StoredReplyClient} from './stored-replies/stored-replies.client';
+import {DocsClient} from './docs/docs.client';
+import {Angie} from './angie/angie';
 import * as http from 'http';
 
-console.log('Enviroment Variables:');
+console.log('Environment Variables:');
 console.log('TOKEN: ' + process.env.TOKEN);
 console.log('NODE_ENV: ' + process.env.NODE_ENV);
 console.log('ROOMS: ' + process.env.ROOMS);
@@ -20,10 +20,10 @@ const clients = [
   new DocsClient(),
   new StoredReplyClient(),
   new AnalyzerClient(),
-  ]
+];
 
 const bots = roomNames.split(",")
-  .map(roomName => new Angie(process.env.TOKEN, roomName, isProd, clients))
+  .map(roomName => new Angie(process.env.TOKEN, roomName, isProd, clients));
 
 
 //this should the errors in the server logs
