@@ -4,7 +4,7 @@ import {MessageModel} from '../../src/angie/gitter';
 
 describe(`Docs Client`, () => {
 
-  const client = new DocsClient(null, {
+  const client = new DocsClient(null, null, {
       "@angular/common": [
         {
           "title": "AsyncPipe",
