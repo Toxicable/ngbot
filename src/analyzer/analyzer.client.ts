@@ -20,8 +20,7 @@ export class AnalyzerClient implements ReplyClient {
     if (isCode) {
       return this.mb
         .message('yo, there\'s code in that dude')
-        .tag(message.fromUser.displayName)
-        .toString();
+        .tag(message.fromUser.displayName);
     }
   }
 }

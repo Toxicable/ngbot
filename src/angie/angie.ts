@@ -70,14 +70,14 @@ export class Angie {
     // globals
     const globalReply = this.clients.map(c => c.getGlobal(message)).filter(msg => !!msg);
     if (globalReply.length > 0) {
-      return globalReply[0];
+      return globalReply[0].toString();
     }
 
     if (textParts[0] === 'angie') {
 
       const reply = this.clients.map(c => c.getReply(message)).filter(msg => !!msg);
       if (reply.length > 0) {
-        return reply[0];
+        return reply[0].toString();
       }
 
     }

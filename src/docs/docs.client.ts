@@ -1,3 +1,4 @@
+import { MessageBuilder } from './../util/message-builder';
 import { MessageModel } from '../angie/gitter';
 import { ReplyClient } from '../reply-client';
 import { ApiModule, Api } from './api-docs-module';
@@ -9,7 +10,11 @@ export class DocsClient implements ReplyClient {
   private docsApiUrl = this.docsApiBaseUrl + '/api-list.json';
   private apis: Api[];
 
-  constructor(private http = new Http(), fallback = {}) {
+  constructor(
+    private http = new Http(),
+    private mb = new MessageBuilder(),
+    fallback = {}
+    ) {
     // We can provide a static fallback to use before observable is completed
     // Good for testing, too
     this.apis = this.processDocs(fallback);
@@ -57,7 +62,7 @@ export class DocsClient implements ReplyClient {
       } else {
         reply = `Unable to find docs for: ${messageParts.slice(2).join(' ')}`;
       }
-      return reply;
+      return this.mb.message(reply);
     }
   }
 

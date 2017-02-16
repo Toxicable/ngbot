@@ -1,3 +1,4 @@
+import { MessageBuilder } from './../util/message-builder';
 import { MessageModel } from '../angie/gitter';
 import { replies } from './replies';
 import { ReplyClient } from '../reply-client';
@@ -7,28 +8,32 @@ export class StoredReplyClient implements ReplyClient {
 
   replies: { [key: string]: string };
 
-  constructor() {
+  constructor(
+    private mb = new MessageBuilder()
+  ) {
     this.replies = replies;
   }
 
   getGlobal(message: MessageModel) {
     const text = message.text;
     if (text.includes('angular3') || text.includes('angular 3')) {
-      return this.replies['angular3'];
+      return this.mb.message(this.replies['angular3']);
     }
 
     if (text.includes('hello')) {
-      return `@${message.fromUser.username}: Hello!`;
+      return this.mb.message(`@${message.fromUser.username}: Hello!`);
     }
     return null;
   }
 
-  getReply(message: MessageModel): string {
+  getReply(message: MessageModel): MessageBuilder {
     const text = message.text;
 
     if (text.includes('help')) {
-      return 'Topics you can ask me about:' + Object.keys(this.replies).join(', ') +
-        '. You can also as me for links to the docs with `angie docs`.';
+      return this.mb.message(
+        'Topics you can ask me about:' + Object.keys(this.replies).join(', ') +
+        '. You can also as me for links to the docs with `angie docs`.'
+      );
     }
 
     const key = Object.keys(this.replies)
@@ -45,7 +50,7 @@ export class StoredReplyClient implements ReplyClient {
     } else {
       reply = this.replies['noStoredReply'];
     }
-    return reply;
+    return this.mb.message(reply);
   }
 
 }
