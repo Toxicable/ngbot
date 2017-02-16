@@ -41,11 +41,11 @@ export class DocsClient implements ReplyClient {
     return `***[\`${title}\`](${link})*** is a **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
   }
 
-  getGlobal(message: MessageModel) {
+  getGlobal(message: MessageModel): MessageBuilder {
     return null;
   }
 
-  getReply(message: MessageModel) {
+  getReply(message: MessageModel): MessageBuilder {
     const text = message.text;
     const messageParts = text.split(' ');
 

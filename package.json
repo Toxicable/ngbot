@@ -21,17 +21,19 @@
     "@types/cheerio": "^0.17.31",
     "@types/jasmine-node": "^1.14.30",
     "@types/marked": "^0.0.28",
+    "@types/semver": "^5.3.30",
     "cheerio": "^0.22.0",
     "jasmine-node": "^1.14.5",
     "marked": "^0.3.6",
     "node-gitter": "^2.0.5",
     "request": "^2.79.0",
     "rxjs": "^5.0.3",
+    "semver": "^5.3.0",
     "typescript": "^2.1.5"
   },
   "devDependencies": {
     "@types/node": "^7.0.4",
-    "tslint": "^4.4.1",
-    "rimraf": "^2.5.4"
+    "rimraf": "^2.5.4",
+    "tslint": "^4.4.1"
   }
 }
