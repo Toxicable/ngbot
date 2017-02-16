@@ -1,8 +1,7 @@
-import {ReplyClient} from '../reply-client';
-import {Observable, Subscription} from 'rxjs';
-import {Http} from '../util/http';
-import {GitterClient, Message, MessageModel, User, Room} from './gitter';
-import {getTextPart} from '../util/cli-helper';
+import { ReplyClient } from '../reply-client';
+import { Observable, Subscription } from 'rxjs';
+import { Http } from '../util/http';
+import { GitterClient, Message, MessageModel, User, Room } from './gitter';
 import * as Gitter from 'node-gitter';
 
 export class Angie {
@@ -13,13 +12,14 @@ export class Angie {
   private lastMessagePostedAt: number = null;
 
 
-  constructor(private token: string,
-              private roomName: string,
-              private isProd: boolean,
-              private clients: ReplyClient[],
-              private throttleThreshold = 250,
-              private http = new Http(),
-              private gitter: GitterClient = new Gitter(token),) {
+  constructor(
+    private token: string,
+    private roomName: string,
+    private isProd: boolean,
+    private clients: ReplyClient[],
+    private throttleThreshold = 250,
+    private http = new Http(),
+    private gitter: GitterClient = new Gitter(token), ) {
     this.start();
   }
 
@@ -35,12 +35,11 @@ export class Angie {
           .filter(message => message.operation === 'create')
           .map(message => message.model)
           .filter(message => message.fromUser.id !== this.botId || message.text.includes('test'))
-          .do(message => this.handleIncomingMessage(room, message))
+          .do(message => this.handleIncomingMessage(room, message));
 
       })
-      .subscribe(() => {
-        },
-        error => console.log('ERROR: ' + error));
+      .subscribe(() => { },
+      error => console.log('ERROR: ' + error));
   }
 
 
@@ -51,37 +50,32 @@ export class Angie {
       console.log('No reply sent');
       return;
     }
-    //replyText = ;
     replyText = this.isProd ? replyText : `DEBUG: ${replyText}`;
     const now = new Date().getTime();
     const timeSinceLastMessage = now - this.lastMessagePostedAt;
     if (timeSinceLastMessage > this.throttleThreshold) {
       room.send(replyText);
-      let lastMessagePostedAt = now;
-      console.log('Reply sent')
+      const lastMessagePostedAt = now;
+      console.log('Reply sent');
     } else {
-      console.log(`Time Threshold hit, the last message was sent ${this.throttleThreshold} ago`)
+      console.log(`Time Threshold hit, the last message was sent ${this.throttleThreshold} ago`);
     }
   }
 
 
   getReply(message: MessageModel): string {
-    let text = message.text.toLowerCase();
+    const text = message.text.toLowerCase();
     const textParts = text.split(' ');
 
-    //globals
-    const globalReply = this.clients.map(c => c.getGlobal(message)).filter(obs => !!obs);
+    // globals
+    const globalReply = this.clients.map(c => c.getGlobal(message)).filter(msg => !!msg);
     if (globalReply.length > 0) {
       return globalReply[0];
     }
 
-    if (getTextPart(textParts, 0) === 'angie') {
+    if (textParts[0] === 'angie') {
 
-      if (text.includes('hello')) { //personal message them
-        return `@${message.fromUser.username}: Hello!`;
-      }
-
-      const reply = this.clients.map(c => c.getReply(message)).filter(obs => !!obs);
+      const reply = this.clients.map(c => c.getReply(message)).filter(msg => !!msg);
       if (reply.length > 0) {
         return reply[0];
       }

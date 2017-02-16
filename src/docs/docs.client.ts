@@ -1,8 +1,7 @@
-import {MessageModel} from '../angie/gitter';
-import {ReplyClient} from '../reply-client';
-import {ApiModule, Api} from './api-docs-module';
-import {Http} from '../util/http';
-import {getTextPart} from '../util/cli-helper';
+import { MessageModel } from '../angie/gitter';
+import { ReplyClient } from '../reply-client';
+import { ApiModule, Api } from './api-docs-module';
+import { Http } from '../util/http';
 
 export class DocsClient implements ReplyClient {
 
@@ -34,7 +33,7 @@ export class DocsClient implements ReplyClient {
     const title = api.title;
     const link = `${this.docsApiUrl}/${api.path}`;
     const type = api.docType;
-    const stableString = api.stability == 'stable' ? 'stable' : 'unstable';
+    const stableString = api.stability === 'stable' ? 'stable' : 'unstable';
     const barrel = api.barrel;
     return `***[\`${title}\`](${link})*** is a **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
   }
@@ -47,8 +46,8 @@ export class DocsClient implements ReplyClient {
     const text = message.text;
     const messageParts = text.split(' ');
 
-    if (getTextPart(messageParts, 1) === 'docs') {
-      let matchedApi = this.apis.find(api => {
+    if (messageParts[1] === 'docs') {
+      const matchedApi = this.apis.find(api => {
         return text.toLowerCase().includes(api.title.toLowerCase());
       });
 

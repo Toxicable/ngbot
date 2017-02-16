@@ -1,14 +1,15 @@
-import {MessageBuilder} from '../util/message-builder';
-import {MessageModel} from '../angie/gitter';
-import {ReplyClient} from '../reply-client';
-import {Analyzer} from './analyzer';
-import {getTextOutsideCodeBlocks} from '../util/formatting';
+import { MessageBuilder } from '../util/message-builder';
+import { MessageModel } from '../angie/gitter';
+import { ReplyClient } from '../reply-client';
+import { Analyzer } from './analyzer';
+import { getTextOutsideCodeBlocks } from '../util/formatting';
 
 
 export class AnalyzerClient implements ReplyClient {
-  constructor(private analyzer = new Analyzer(),
-              private mb = new MessageBuilder()) {
-  }
+  constructor(
+    private analyzer = new Analyzer(),
+    private mb = new MessageBuilder(),
+  ) { }
 
   getReply(message: MessageModel) {
     return null;
@@ -23,5 +24,4 @@ export class AnalyzerClient implements ReplyClient {
         .toString();
     }
   }
-
 }
