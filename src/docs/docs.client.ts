@@ -1,8 +1,8 @@
 import {MessageBuilder} from '../util/message-builder';
-import {MessageModel} from '../angie/gitter';
 import {ReplyClient} from '../reply-client';
 import {ApiModule, Api} from './api-docs-module';
 import {Http} from '../util/http';
+import {CommandNode} from '../angie/command-decoder';
 
 export class DocsClient implements ReplyClient {
 
@@ -41,27 +41,34 @@ export class DocsClient implements ReplyClient {
     return `***[\`${title}\`](${link})*** is a **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
   }
 
-  getGlobal(message: MessageModel): MessageBuilder {
-    return null;
-  }
+  public commandSubtree: CommandNode = {
+    name: 'docs',
+    regex: /^(give\s+me\s+|get\s+|get\s+me\s+)?\s*docs(\sfor)?/i,
+    fn: null,
+    help: null,
+    children: [
+      {
+        name: ':query',
+        regex: null,
+        children: null,
+        help: 'Search the [API Reference](https://angular.io/docs/ts/latest/api)',
+        fn: (query: string) => {
+          const matchedApi = this.apis.find(api => {
+            return query.toLowerCase().includes(api.title.toLowerCase());
+          });
 
-  getReply(message: MessageModel): MessageBuilder {
-    const text = message.text;
-    const messageParts = text.split(' ');
-
-    if (messageParts[1] === 'docs') {
-      const matchedApi = this.apis.find(api => {
-        return text.toLowerCase().includes(api.title.toLowerCase());
-      });
-
-      let reply: string;
-      if (matchedApi) {
-        reply = this.formatApiToMessage(matchedApi);
-      } else {
-        reply = `Unable to find docs for: ${messageParts.slice(2).join(' ')}`;
+          let reply: string;
+          if (matchedApi) {
+            reply = this.formatApiToMessage(matchedApi);
+          } else {
+            reply = `Aww, bummer :anguished: Looks like you wanted docs for _${query}_, but I ` +
+              `couldn't find anything. Might be a good idea to look directly at ` +
+              `[API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
+          }
+          return this.mb.message(reply);
+        }
       }
-      return this.mb.message(reply);
-    }
-  }
+    ]
+  };
 
 }

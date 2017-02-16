@@ -1,30 +1,30 @@
-import { ReplyClient } from '../reply-client';
-import { Observable, Subscription } from 'rxjs';
-import { Http } from '../util/http';
-import { GitterClient, Message, MessageModel, User, Room } from './gitter';
+import {Observable, Subscription} from 'rxjs';
+import {Http} from '../util/http';
+import {GitterClient, Message, MessageModel, User, Room} from './gitter';
 import * as Gitter from 'node-gitter';
+import {CommandTree, ParsingObject} from './command-decoder';
 
 export class Angie {
 
   private botId: string;
   private gitterSub: Subscription;
-  private botKeyWord = 'angie';
   private lastMessagePostedAt: number = null;
 
 
-  constructor(
-    private token: string,
-    private roomName: string,
-    private isProd: boolean,
-    private clients: ReplyClient[],
-    private throttleThreshold = 250,
-    private http = new Http(),
-    private gitter: GitterClient = new Gitter(token), ) {
-    this.start();
+  constructor(private token: string,
+              private roomName: string,
+              private isProd: boolean,
+              private commandTree: CommandTree,
+              private throttleThreshold = 250,
+              private http = new Http(),
+              private gitter: GitterClient = new Gitter(token)) {
+    if (this.http) {
+      this.start();
+    }
   }
 
 
-  start() {
+  private start() {
     this.gitterSub = Observable.fromPromise(this.gitter.currentUser())
       .do((user: User) => this.botId = user.id)
       .flatMap((user: User) => Observable.fromPromise(this.gitter.rooms.join(this.roomName)))
@@ -38,12 +38,13 @@ export class Angie {
           .do(message => this.handleIncomingMessage(room, message));
 
       })
-      .subscribe(() => { },
-      error => console.log('ERROR: ' + error));
+      .subscribe(() => {
+        },
+        error => console.log('ERROR: ' + error));
   }
 
 
-  handleIncomingMessage(room: Room, message: MessageModel) {
+  private handleIncomingMessage(room: Room, message: MessageModel): void {
     let replyText = this.getReply(message);
 
     if (!replyText) {
@@ -63,24 +64,46 @@ export class Angie {
   }
 
 
-  getReply(message: MessageModel): string {
-    const text = message.text.toLowerCase();
-    const textParts = text.split(' ');
-
-    // globals
-    const globalReply = this.clients.map(c => c.getGlobal(message)).filter(msg => !!msg);
-    if (globalReply.length > 0) {
-      return globalReply[0].toString();
-    }
-
-    if (textParts[0] === 'angie') {
-
-      const reply = this.clients.map(c => c.getReply(message)).filter(msg => !!msg);
-      if (reply.length > 0) {
-        return reply[0].toString();
+  public getReply(message: MessageModel): string {
+    const text = message.text;
+    const parsingObject: ParsingObject = this.commandTree.getExe(message.text);
+    if (!parsingObject.error.exists) {
+      return parsingObject.commandFn().toString();
+    } else {
+      if (parsingObject.expected[0] === 'angie') {
+        // not even a command, do nothing
+        return null;
+      } else {
+        return this.getErrorDetails(parsingObject);
       }
-
     }
   }
+
+
+  private getErrorDetails(o: ParsingObject): string {
+    switch (o.error.type) {
+      case 'no-match':
+        return this.getNoNextMatchErrorDetails(o);
+      case 'premature-exit':
+        return this.getPrematureExitErrorDetails(o);
+    }
+  }
+
+
+  private getPrematureExitErrorDetails(o: ParsingObject): string {
+    return `Based on \`${o.collectedCommands.map(c => c.literal)}\` I figured you were actually giving me command ` +
+      `for \`${o.collectedCommands.map(c => c.name)}\`, but that's where your command ends.` +
+      `I was expecting something of the following: ${o.expected.map(e => `\`${e}\``).join(', ')}. ` +
+      `Maybe you made a typo, or my creators @Toxicable and @lazarljubenovic made a mistake creating me! :sweat_smile:`;
+  }
+
+
+  private getNoNextMatchErrorDetails(o: ParsingObject): string {
+    return `Based on \`${o.collectedCommands.map(c => c.literal)}\` I figured you were actually giving me command ` +
+      `for \`${o.collectedCommands.map(c => c.name)}\`, but I have no idea what you mean by \`${o.remainingCommand}\`. ` +
+      `I was expecting something of the following: ${o.expected.map(e => `\`${e}\``).join(', ')}. ` +
+      `Maybe you made a typo, or my creators @Toxicable and @lazarljubenovic made a mistake creating me! :sweat_smile:`;
+  }
+
 
 }

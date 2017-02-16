@@ -3,6 +3,7 @@ import {MessageModel} from '../angie/gitter';
 import {MessageBuilder} from '../util/message-builder';
 import {Http} from '../util/http';
 import * as semver from 'semver';
+import {CommandNode} from '../angie/command-decoder';
 
 
 export const VERSIONS_FALLBACK = [
@@ -131,11 +132,12 @@ export class VersionsClient implements ReplyClient {
     }
   }
 
-  getReply(message: MessageModel): MessageBuilder {
-    const text = message.text;
-    const messageParts = text.split(' ');
-
-    if (messageParts[1] === 'versions') {
+  public commandSubtree: CommandNode = {
+    name: 'version',
+    regex: /^version/,
+    children: null,
+    help: `Check out what's the current version of Angular`,
+    fn: () => {
       const repos: string[] = this.versions.map(version => {
         const nameLink = `[**\`${version.repo.name}\`**](${version.repo.url})`;
         const stableLink = `[**${version.versions.stable.name}**](${version.versions.stable.url})`;
@@ -143,13 +145,7 @@ export class VersionsClient implements ReplyClient {
         return `${nameLink} is at ${stableLink} (and ${edgeLink})`;
       });
       return this.mb.message(repos.join('; '));
-    } else {
-      return null;
-    }
-  }
-
-  getGlobal(message: MessageModel): MessageBuilder {
-    return undefined;
-  }
+    },
+  };
 
 }

@@ -4,6 +4,8 @@ import { StoredReplyClient } from './stored-replies/stored-replies.client';
 import { DocsClient } from './docs/docs.client';
 import { Angie } from './angie/angie';
 import * as http from 'http';
+import {CommandTree} from './angie/command-decoder';
+import {VersionsClient} from './versions/versions.client';
 
 console.log('Environment Variables:');
 console.log('TOKEN: ' + process.env.TOKEN);
@@ -17,15 +19,14 @@ const roomNames: string = isProd ? process.env.ROOMS : 'angular-gitter-replybot/
 
 
 const throttleThreshold = 250;
-const clients = [
-  new DocsClient(),
-  new StoredReplyClient(),
-  new AnalyzerClient(),
-  new EventsClient(),
-];
+
+const commandTree: CommandTree = new CommandTree();
+commandTree.registerSubCommand(new DocsClient().commandSubtree);
+commandTree.registerSubCommand(new EventsClient().commandSubtree);
+commandTree.registerSubCommand(new VersionsClient().commandSubtree);
 
 const bots = roomNames.split(',')
-  .map(roomName => new Angie(process.env.TOKEN, roomName, isProd, clients));
+  .map(roomName => new Angie(process.env.TOKEN, roomName, isProd, commandTree));
 
 
 // this should the errors in the server logs

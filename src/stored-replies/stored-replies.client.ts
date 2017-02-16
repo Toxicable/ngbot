@@ -5,7 +5,7 @@ import { replies } from './replies';
 import { ReplyClient } from '../reply-client';
 
 
-export class StoredReplyClient implements ReplyClient {
+export class StoredReplyClient {
 
   replies: StoredReply[];
 

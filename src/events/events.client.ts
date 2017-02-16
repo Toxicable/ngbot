@@ -3,6 +3,7 @@ import {Event} from './event';
 import {MessageBuilder} from '../util/message-builder';
 import {MessageModel} from '../angie/gitter';
 import {ReplyClient} from '../reply-client';
+import {CommandNode} from '../angie/command-decoder';
 
 
 export class EventsClient implements ReplyClient {
@@ -18,33 +19,31 @@ export class EventsClient implements ReplyClient {
     }
   }
 
-  getReply(message: MessageModel) {
-    return null;
-  }
+  public commandSubtree: CommandNode = {
+    name: 'events',
+    regex: /events/i,
+    fn: () => {
+      const upcomingEvents = this.events.map(e => `[${e.name}](${e.link})`).join(', ');
+      return this.mb.message(`Events for this year include ${upcomingEvents}`);
+    },
+    help: `List all events that I'm aware about`,
+    children: [
+      {
+        name: ':query',
+        regex: null,
+        children: null,
+        help: `Find out details about a specific event`,
+        fn: (query: string) => {
+          const event = this.events.find(e => e.name.toLowerCase() === query.toLowerCase());
 
-  getGlobal(message: MessageModel) {
-    const textParts = message.text.split(' ');
+          if (!event) {
+            return this.mb.message(`Oops! :flushed: I don't know about an event named _${query}_.`);
+          }
 
-    if (textParts[1] === 'events') {
-      if (textParts[2] === 'help') {
-        return this.mb.message('You can see all with `angie events`, for specific events use `angie events {eventName}`');
+          return this.mb.message(`[${event.name}](${event.link}): located at ${event.location} ${event.date.toDateString()}`);
+        },
       }
+    ]
+  };
 
-      if (!textParts[2]) {
-        const upcomingEvents = this.events.map(e => `[${e.name}](${e.link})`).join(', ');
-        return this.mb.message(`Events for this year include ${upcomingEvents}`);
-      }
-
-      if (textParts[2]) {
-        const eventName = textParts[2];
-        const event = this.events.find(e => e.name.toLowerCase() === eventName.toLowerCase());
-
-        if (!event) {
-          return this.mb.message(`Sorry I wasn't able to find that event`);
-        }
-
-        return this.mb.message(`[${event.name}](${event.link}): located at ${event.location} ${event.date.toDateString()}`);
-      }
-    }
-  }
 }
