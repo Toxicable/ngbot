@@ -1,3 +1,5 @@
+/* tslint:disable:max-line-length */
+
 export const replies = {
   'getting started': `To get started with Angular, do [Quickstart](https://angular.io/docs/ts/latest/quickstart.html). After that, go through [Tour of Heroes (ToH)](https://angular.io/docs/ts/latest/tutorial/). Check the [Guide](https://angular.io/docs/ts/latest/guide/) for how to proceed after that. Good (often advanced) blogs are [Thoughtram](http://blog.thoughtram.io/exploring-angular-2/) and [Victor Savkin's blog](https://vsavkin.com/). A good starting point for a project is [angular-cli](https://github.com/angular/angular-cli)`,
   'not enough info': `Please provide a brief description of what's going with the code. Pasting the error and saying "it's not working" doesn't help us help you. When did the problem start happening? Does it work if you remove/add some lines? Does it work in a different context? What have you tried so far?`,

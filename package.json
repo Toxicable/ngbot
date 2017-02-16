@@ -9,10 +9,11 @@
   },
   "scripts": {
     "start": "node ./src/index.js",
-    "build": "tsc",
+    "build": "tsc && npm run lint",
     "deploy": "npm run build && gcloud app deploy --stop-previous-version",
     "clean": "rimraf src/**/*.js && rimraf src/**/*.map",
-    "test": "jasmine-node spec"
+    "test": "jasmine-node spec",
+    "lint": "tslint src/**/*.ts --force"
   },
   "author": "Fabian Wiles",
   "license": "MIT",

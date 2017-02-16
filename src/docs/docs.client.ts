@@ -1,7 +1,7 @@
-import { MessageModel } from '../angie/gitter';
-import { ReplyClient } from '../reply-client';
-import { ApiModule, Api } from './api-docs-module';
-import { Http } from '../util/http';
+import {MessageModel} from '../angie/gitter';
+import {ReplyClient} from '../reply-client';
+import {ApiModule, Api} from './api-docs-module';
+import {Http} from '../util/http';
 
 export class DocsClient implements ReplyClient {
 
