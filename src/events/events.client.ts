@@ -1,22 +1,27 @@
-import { events } from './events';
-import { Event } from './event';
-import { MessageBuilder } from './../util/message-builder';
-import { MessageModel } from './../angie/gitter';
-import { ReplyClient } from './../reply-client';
+import {events} from './events';
+import {Event} from './event';
+import {MessageBuilder} from '../util/message-builder';
+import {MessageModel} from '../angie/gitter';
+import {ReplyClient} from '../reply-client';
+
+
 export class EventsClient implements ReplyClient {
 
   events: Event[];
 
-  constructor(
-    private mb: MessageBuilder = new MessageBuilder(),
-  ) {
-    this.events = events;
+  constructor(private mb: MessageBuilder = new MessageBuilder(),
+              fallback?: Event[]) {
+    if (fallback) {
+      this.events = fallback;
+    } else {
+      this.events = events;
+    }
   }
-
 
   getReply(message: MessageModel) {
     return null;
   }
+
   getGlobal(message: MessageModel) {
     const textParts = message.text.split(' ');
 
