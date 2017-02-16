@@ -1,3 +1,4 @@
+import { EventsClient } from './events/events.client';
 import { AnalyzerClient } from './analyzer/analyzer.client';
 import { StoredReplyClient } from './stored-replies/stored-replies.client';
 import { DocsClient } from './docs/docs.client';
@@ -20,6 +21,7 @@ const clients = [
   new DocsClient(),
   new StoredReplyClient(),
   new AnalyzerClient(),
+  new EventsClient(),
 ];
 
 const bots = roomNames.split(',')

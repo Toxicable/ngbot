@@ -9,7 +9,7 @@ export class DocsClient implements ReplyClient {
   private docsApiUrl = this.docsApiBaseUrl + '/api-list.json';
   private apis: Api[];
 
-  constructor(private http = new Http(), fallback = null) {
+  constructor(private http = new Http(), fallback = {}) {
     // We can provide a static fallback to use before observable is completed
     // Good for testing, too
     this.apis = this.processDocs(fallback);
