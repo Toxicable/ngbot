@@ -1,5 +1,4 @@
-import { MessageBuilder } from './../util/message-builder';
-
+import {MessageBuilder} from './../util/message-builder';
 import {MessageModel} from '../angie/gitter';
 import {ReplyClient} from '../reply-client';
 import {ApiModule, Api} from './api-docs-module';
