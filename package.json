@@ -13,7 +13,7 @@
     "deploy": "npm run build && gcloud app deploy --stop-previous-version",
     "clean": "rimraf src/**/*.js && rimraf src/**/*.map",
     "test": "jasmine-node spec",
-    "lint": "tslint src/**/*.ts --force"
+    "lint": "tslint spec/**/*.ts src/**/*.ts --force"
   },
   "author": "Fabian Wiles",
   "license": "MIT",

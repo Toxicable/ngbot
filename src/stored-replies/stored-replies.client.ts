@@ -49,7 +49,7 @@ export class StoredReplyClient implements ReplyClient {
     if (reply) {
       return this.mb.message(reply.message);
     } else {
-      return this.mb.message(this.replies.find(r => r.keys[0] === 'noStoredReply').message)
+      return this.mb.message(this.replies.find(r => r.keys[0] === 'noStoredReply').message);
     }
   }
 
