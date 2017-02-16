@@ -4,7 +4,7 @@ export interface ApiModule {
 
 
 export interface Api {
-  title: string,
+  title: string;
   path: string;
   docType: string;
   stability: string;

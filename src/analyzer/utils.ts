@@ -1,30 +1,30 @@
 export function isUppercase(character: string): boolean {
-  if (character == null) {
+  if (character === null) {
     return false;
   }
-  return character == character.toUpperCase();
+  return character === character.toUpperCase();
 }
 
 
 export function isLowerCase(character: string): boolean {
-  if (character == null) {
+  if (character === null) {
     return false;
   }
-  return character == character.toLowerCase();
+  return character === character.toLowerCase();
 }
 
 
 export function isLetter(character: string): boolean {
-  return character.match(/[a-z]/i).length != 0;
+  return character.match(/[a-z]/i).length !== 0;
 }
 
 
 export function getNumberOfRegexMatches(text: string, regex: RegExp): number {
-  if (text == null) {
+  if (text === null) {
     return 0;
   }
   const matches = text.match(regex);
-  if (matches == null) {
+  if (matches === null) {
     return 0;
   } else {
     return matches.length;
@@ -43,7 +43,7 @@ function sum(arr: number[]): number {
 
 
 function scalarProduct(arr1: number[], arr2: number[]): number {
-  if (arr1.length != arr2.length) {
+  if (arr1.length !== arr2.length) {
     throw new Error(`Arrays must be of same length to participate in scalar product`);
   }
   return arr1.reduce((acc, curr, index) => acc + curr * arr2[index], 0);

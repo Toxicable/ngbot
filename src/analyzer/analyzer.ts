@@ -67,7 +67,7 @@ export class Analyzer {
 
   private getNumberOfWords(text: string): number {
     return text.split(/\b/g)
-      .filter(word => word != ' ')
+      .filter(word => word !== ' ')
       .length;
   }
 
@@ -126,8 +126,8 @@ export class Analyzer {
   }
 
   private isWordCamelCase(word: string): boolean {
-    const isMadeOfLetters = word.split('').every(char => char.match(/[a-z]/i) != null);
-    const hasBothLowerAndUpperCase = word != word.toLowerCase() && word != word.toUpperCase();
+    const isMadeOfLetters = word.split('').every(char => char.match(/[a-z]/i) !== null);
+    const hasBothLowerAndUpperCase = word !== word.toLowerCase() && word !== word.toUpperCase();
     const isJustCapitalizedOnce = isUppercase(word[0]) && word.slice(1).split('').every(isLowerCase);
     return isMadeOfLetters && hasBothLowerAndUpperCase && !isJustCapitalizedOnce;
   }
@@ -203,12 +203,12 @@ export class Analyzer {
       uncommonCharacterSequences: charactersPercent(analysis.uncommonCharacterSequences),
       camelCase: wordsPercent(analysis.camelCase),
       underscoreCase: wordsPercent(analysis.underscoreCase),
-    }
+    };
   }
 
   public getScore(text: string, weights: AnalysisWeights = WEIGHTS): number {
     // filtering out nonsense
-    if (text == null || text.trim() == '') {
+    if (text === null || text.trim() === '') {
       return 0;
     }
 

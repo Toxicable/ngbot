@@ -5,12 +5,12 @@ export interface GitterClient {
 
 
 export interface RoomClient {
-  join(roomName: string): Promise<Room>
+  join(roomName: string): Promise<Room>;
 }
 
 
 export interface Room {
-  streaming(): Stream
+  streaming(): Stream;
   send(message: string): void;
   name: string;
 }
