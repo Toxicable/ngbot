@@ -75,4 +75,17 @@ describe(`Docs Client`, () => {
     expect(actual).toEqual(expected);
   });
 
+  it(`should ignore a message not about docs`, () => {
+    Object.assign(dummyMessage, {text: 'angie not docs'});
+    const reply: MessageBuilder = client.getReply(dummyMessage);
+    let actual: string;
+    if (reply != null) {
+      actual = reply.toString();
+    } else {
+      actual = null;
+    }
+    const expected = null;
+    expect(actual).toEqual(expected);
+  });
+
 });
