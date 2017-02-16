@@ -31,8 +31,8 @@ export class EventsClient implements ReplyClient {
       }
 
       if (!textParts[2]) {
-        const upcommingEvents = this.events.map(e => `[${e.name}](${e.link})`).join(', ');
-        return this.mb.message(`Events for this year include ${upcommingEvents}`);
+        const upcomingEvents = this.events.map(e => `[${e.name}](${e.link})`).join(', ');
+        return this.mb.message(`Events for this year include ${upcomingEvents}`);
       }
 
       if (textParts[2]) {
