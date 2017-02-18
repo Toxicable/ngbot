@@ -1,11 +1,11 @@
-import { EventsClient } from './events/events.client';
-import { AnalyzerClient } from './analyzer/analyzer.client';
-import { StoredReplyClient } from './stored-replies/stored-replies.client';
-import { DocsClient } from './docs/docs.client';
-import { Angie } from './angie/angie';
+import { EventsClient } from './src/events/events.client';
+import { AnalyzerClient } from './src/analyzer/analyzer.client';
+import { StoredReplyClient } from './src/stored-replies/stored-replies.client';
+import { DocsClient } from './src/docs/docs.client';
+import { Angie } from './src/angie/angie';
 import * as http from 'http';
-import {CommandTree} from './angie/command-decoder';
-import {VersionsClient} from './versions/versions.client';
+import {CommandTree} from './src/angie/command-decoder';
+import {VersionsClient} from './src/versions/versions.client';
 
 console.log('Environment Variables:');
 console.log('TOKEN: ' + process.env.TOKEN);

@@ -63,7 +63,6 @@ const dummyMessage: MessageModel = {
   text: 'some text here'
 };
 
-
 describe(`Angie`, () => {
 
   const angie = new Angie(null, null, true, commandTree, 0, null, null);

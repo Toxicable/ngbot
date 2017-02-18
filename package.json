@@ -2,7 +2,7 @@
   "name": "angular-gitter-replybot",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "index.js",
   "repository": {
     "type": "public",
     "url": "https://github.com/Toxicable/angular-gitter-replybot"
@@ -11,19 +11,14 @@
     "start": "node ./src/index.js",
     "build": "tsc && npm run lint",
     "deploy": "npm run build && gcloud app deploy --stop-previous-version",
-    "clean": "rimraf src/**/*.js && rimraf src/**/*.map",
-    "test": "jasmine-node spec",
+    "clean": "rimraf src/**/*.js && rimraf src/**/*.map && rimraf spec/**/*.js && rimraf spec/**/*.map",
+    "test": "karma start",
     "lint": "tslint spec/**/*.ts src/**/*.ts --force"
   },
   "author": "Fabian Wiles",
   "license": "MIT",
   "dependencies": {
-    "@types/cheerio": "^0.17.31",
-    "@types/jasmine-node": "^1.14.30",
-    "@types/marked": "^0.0.28",
-    "@types/semver": "^5.3.30",
     "cheerio": "^0.22.0",
-    "jasmine-node": "^1.14.5",
     "marked": "^0.3.6",
     "node-gitter": "^2.0.5",
     "request": "^2.79.0",
@@ -32,8 +27,19 @@
     "typescript": "^2.1.5"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.17.31",
+    "@types/jasmine-node": "^1.14.30",
+    "@types/marked": "^0.0.28",
     "@types/node": "^7.0.4",
+    "@types/semver": "^5.3.30",
+    "jasmine": "^2.5.3",
     "jasmine-core": "^2.5.2",
+    "jasmine-node": "^1.14.5",
+    "jasmine-node-debug": "^0.1.1",
+    "karma": "^1.4.1",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.1.0",
+    "karma-typescript": "^2.1.7",
     "rimraf": "^2.5.4",
     "tslint": "^4.4.1"
   }
