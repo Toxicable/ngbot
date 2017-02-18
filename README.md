@@ -1,3 +1,6 @@
+
+[![Gitter](https://badges.gitter.im/angie-bot/Lobby.svg)](https://gitter.im/angie-bot/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # AngieTheBot
 
 A chatbot for scripted replies in the https://gitter.im/angular/angular gitter channel (it's not actually pointed there just yet)
