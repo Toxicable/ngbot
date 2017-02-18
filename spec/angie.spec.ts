@@ -60,29 +60,9 @@ commandTree.registerSubCommand(eventsClient.commandSubtree);
 commandTree.registerSubCommand(versionsClient.commandSubtree);
 
 const dummyMessage: MessageModel = {
-  id: '53316ec37bfc1a0000000011',
-  text: 'some text here',
-  html: 'some text here',
-  sent: '2014-03-25T11:55:47.537Z',
-  editedAt: null,
-  fromUser: {
-    id: '53307734c3599d1de448e192',
-    username: 'malditogeek',
-    displayName: 'Mauro Pompilio',
-    url: '/malditogeek',
-    avatarUrlSmall: 'https://avatars.githubusercontent.com/u/14751?',
-    avatarUrlMedium: 'https://avatars.githubusercontent.com/u/14751?'
-  },
-  unread: false,
-  readBy: 0,
-  urls: [],
-  mentions: [],
-  issues: [{
-    number: '11'
-  }],
-  meta: {},
-  v: 1,
+  text: 'some text here'
 };
+
 
 describe(`Angie`, () => {
 

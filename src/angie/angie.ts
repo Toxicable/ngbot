@@ -65,8 +65,7 @@ export class Angie {
 
 
   public getReply(message: MessageModel): string {
-    const text = message.text;
-    const parsingObject: ParsingObject = this.commandTree.getExe(message.text);
+    const parsingObject = this.commandTree.getExe(message.text, message);
     if (!parsingObject.error.exists) {
       return parsingObject.commandFn().toString();
     } else {

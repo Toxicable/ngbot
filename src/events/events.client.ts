@@ -1,7 +1,7 @@
+import { MessageModel } from './../angie/gitter';
 import {events} from './events';
 import {Event} from './event';
 import {MessageBuilder} from '../util/message-builder';
-import {MessageModel} from '../angie/gitter';
 import {ReplyClient} from '../reply-client';
 import {CommandNode} from '../angie/command-decoder';
 
@@ -33,7 +33,7 @@ export class EventsClient implements ReplyClient {
         regex: null,
         children: null,
         help: `Find out details about a specific event`,
-        fn: (query: string) => {
+        fn: (msg: MessageModel, query?: string) => {
           const event = this.events.find(e => e.name.toLowerCase() === query.toLowerCase());
 
           if (!event) {

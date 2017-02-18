@@ -28,7 +28,7 @@ describe(`Docs Client`, () => {
   );
 
   it(`should get docs for an existing entry`, () => {
-    const actual: string = client.commandSubtree.children[0].fn('AsyncPipe').toString();
+    const actual: string = client.commandSubtree.children[0].fn({text: 'AsyncPipe'}, 'AsyncPipe').toString();
     const expected: string = `***[\`AsyncPipe\`](https://angular.io/docs/ts/latest/api/api-list.json` +
       `/common/index/AsyncPipe-pipe.html)*** is a **pipe** found in \`@angular/common\` and ` +
       `is considered *stable*.`;
@@ -36,7 +36,7 @@ describe(`Docs Client`, () => {
   });
 
   it(`should provide a helpful message if docs don't exist`, () => {
-    const actual: string = client.commandSubtree.children[0].fn('nonsense').toString();
+    const actual: string = client.commandSubtree.children[0].fn({text: 'nonsense'}, 'nonsense').toString();
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for _nonsense_, ` +
       `but I couldn't find anything. Might be a good idea to look directly at ` +
       `[API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
@@ -44,7 +44,7 @@ describe(`Docs Client`, () => {
   });
 
   it(`should provide a helpful message if docs don't exist (for more than one word)`, () => {
-    const actual: string = client.commandSubtree.children[0].fn('some nonsense here').toString();
+    const actual: string = client.commandSubtree.children[0].fn({text: 'some nonsense here'}, 'some nonsense here').toString();
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for ` +
       `_some nonsense here_, but I couldn't find anything. Might be a good idea ` +
       `to look directly at [API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;

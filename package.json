@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@types/node": "^7.0.4",
+    "jasmine-core": "^2.5.2",
     "rimraf": "^2.5.4",
     "tslint": "^4.4.1"
   }

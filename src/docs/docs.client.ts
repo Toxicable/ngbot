@@ -1,3 +1,4 @@
+import { MessageModel } from './../angie/gitter';
 import {MessageBuilder} from '../util/message-builder';
 import {ReplyClient} from '../reply-client';
 import {ApiModule, Api} from './api-docs-module';
@@ -52,7 +53,7 @@ export class DocsClient implements ReplyClient {
         regex: null,
         children: null,
         help: 'Search the [API Reference](https://angular.io/docs/ts/latest/api)',
-        fn: (query: string) => {
+        fn: (msg: MessageModel, query: string = '') => {
           const matchedApi = this.apis.find(api => {
             return query.toLowerCase().includes(api.title.toLowerCase());
           });

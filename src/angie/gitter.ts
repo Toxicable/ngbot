@@ -28,19 +28,19 @@ export interface Message {
 
 
 export interface MessageModel {
-  id: string;
+  id?: string;
   text: string;
-  html: string;
-  sent: string;
-  editedAt: string;
-  fromUser: User;
-  unread: boolean;
-  readBy: number;
-  urls: string[];
-  mentions: any[];
-  issues: any[];
-  meta: any;
-  v: number;
+  html?: string;
+  sent?: string;
+  editedAt?: string;
+  fromUser?: User;
+  unread?: boolean;
+  readBy?: number;
+  urls?: string[];
+  mentions?: any[];
+  issues?: any[];
+  meta?: any;
+  v?: number;
 }
 
 

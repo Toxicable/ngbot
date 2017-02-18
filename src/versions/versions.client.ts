@@ -137,7 +137,7 @@ export class VersionsClient implements ReplyClient {
     regex: /^version/,
     children: null,
     help: `Check out what's the current version of Angular`,
-    fn: () => {
+    fn: (msg: MessageModel, query?: string) => {
       const repos: string[] = this.versions.map(version => {
         const nameLink = `[**\`${version.repo.name}\`**](${version.repo.url})`;
         const stableLink = `[**${version.versions.stable.name}**](${version.versions.stable.url})`;

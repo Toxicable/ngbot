@@ -1,8 +1,8 @@
+import { MessageModel } from './gitter';
 import {MessageBuilder} from '../util/message-builder';
 
 
-export type CommandFn = (query?: string) => MessageBuilder;
-
+export type CommandFn = (msg?: MessageModel, query?: string) => MessageBuilder;
 
 export interface CollectedCommand {
   type: 'query' | 'keyword';
@@ -109,8 +109,8 @@ export class CommandTree {
   }
 
 
-  public getExe(command: string): ParsingObject {
-    return this.getExeForCommand(command, this.root, command, []);
+  public getExe(query: string, msg: MessageModel): ParsingObject {
+    return this.getExeForCommand(query, this.root, query, [], msg);
   }
 
 
@@ -121,12 +121,14 @@ export class CommandTree {
                              type: 'query' | 'keyword',
                              name: string,
                              literal: string,
-                           }[]): ParsingObject {
+                           }[],
+                           msg: MessageModel
+                           ): ParsingObject {
 
     if (remainingCommand.trim() === '') {
       if (currentNode.fn != null) {
         return {
-          commandFn: currentNode.fn,
+          commandFn: currentNode.fn.bind(null, msg),
           error: {
             exists: false,
           },
@@ -156,7 +158,7 @@ export class CommandTree {
 
         if (child.name.startsWith(':')) {
           return {
-            commandFn: child.fn.bind(null, remainingCommand),
+            commandFn: child.fn.bind(null, msg, remainingCommand),
             error: {
               exists: false,
             },
@@ -179,7 +181,7 @@ export class CommandTree {
               name: child.name,
               type: 'keyword',
             }];
-            return this.getExeForCommand(leftoverCommand, child, wholeCommand, newCollectedCommands);
+            return this.getExeForCommand(leftoverCommand, child, wholeCommand, newCollectedCommands, msg);
           }
         }
       }
