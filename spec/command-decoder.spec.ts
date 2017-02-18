@@ -1,3 +1,4 @@
+import { MessageModel } from './../src/angie/gitter';
 import {CommandNode, CommandTree, ParsingObject} from '../src/angie/command-decoder';
 import {MessageBuilder} from '../src/util/message-builder';
 
@@ -32,7 +33,7 @@ describe(`Command Decoder`, () => {
               {
                 name: ':e',
                 regex: null,
-                fn: (q) => new MessageBuilder(`do e: ${q}`),
+                fn: (msg: MessageModel, q: string) => new MessageBuilder(`do e: ${q}`),
                 help: 'help for e',
                 children: null,
               },
