@@ -42,12 +42,12 @@ export class DocsClient implements ReplyClient {
     return Object.keys(docs)
       .map(key => docs[key])
       // flatten out the modules into a single list of APIs
-      .reduce((a, b) => [...a, ...b], []);
+      .reduce((a, b) => [...a, ...b], [])
   }
 
   private formatApiToMessage(api: Api): string {
     const title = api.title;
-    const link = `${this.docsApiUrl}/${api.path}`;
+    const link = `${this.docsApiBaseUrl}/${api.path}`;
     const type = api.docType;
     const stableString = api.stability === 'stable' ? 'stable' : 'unstable';
     const barrel = api.barrel;

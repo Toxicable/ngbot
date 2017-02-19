@@ -79,7 +79,7 @@ describe(`Angie`, () => {
   it(`should reply to a command 'Angie, give me docs for AsyncPipe'`, () => {
     dummyMessage.text = 'Angie, give me docs for AsyncPipe';
     const reply = angie.getReply(dummyMessage);
-    expect(reply).toEqual('***[`AsyncPipe`](https://angular.io/docs/ts/latest/api/api-list.json/co' +
+    expect(reply).toEqual('***[`AsyncPipe`](https://angular.io/docs/ts/latest/api/co' +
       'mmon/index/AsyncPipe-pipe.html)*** is a **pipe** found in `@angular/common` and is considered *stable*.');
   });
 
