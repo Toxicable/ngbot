@@ -30,6 +30,7 @@ export class Angie {
       .flatMap((user: User) => Observable.fromPromise(this.gitter.rooms.join(this.roomName)))
       .flatMap(room => {
         console.log(`Room: ${room.name} ready!`);
+        room.send('Good morning, Angular people! :sunny:');
         const events = room.streaming().chatMessages();
         return Observable.fromEvent<Message>(events, 'chatMessages')
           .filter(message => message.operation === 'create')

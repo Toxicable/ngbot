@@ -39,7 +39,7 @@ export class DocsClient implements ReplyClient {
     const type = api.docType;
     const stableString = api.stability === 'stable' ? 'stable' : 'unstable';
     const barrel = api.barrel;
-    return `***[\`${title}\`](${link})*** is a **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
+    return `***[\`${title}\`](${link})*** is an **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
   }
 
   public commandSubtree: CommandNode = {

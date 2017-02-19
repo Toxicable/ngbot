@@ -58,7 +58,7 @@ export class CommandTree {
       children: [
         {
           name: 'angie',
-          regex: /^\s*(hey\s+|hi\s+)?Angie(,)?/i,
+          regex: /^\s*(hey\s+|hi\s+)?Angie+(,)?/i,
           children: [
             {
               name: 'help',
