@@ -2,12 +2,6 @@ import util = require('../src/util/formatting');
 
 describe(`getTextOutsideCodeBlock`, () => {
 
-  it('shoudl ru na test', () => {
-    debugger
-
-    expect(true).toEqual(true);
-  })
-
   it(`should work when there is no code block in the message`, () => {
     const message: string = `A random message without any code block.`;
     expect(util.getTextOutsideCodeBlocks(message)).toEqual(message + '\n');

@@ -11,15 +11,27 @@ export class DocsClient implements ReplyClient {
   private docsApiUrl = this.docsApiBaseUrl + '/api-list.json';
   private apis: Api[];
 
+  private typePluralMapping = {
+    class: 'a',
+    decorator: 'a',
+    directive: 'a',
+    enum: 'an',
+    function: 'a',
+    interface: 'an',
+    let: 'a', // let !?
+    pipe: 'a',
+    'type-alias': 'a'
+  }
+
   constructor(private http = new Http(),
               private mb = new MessageBuilder(),
               fallback = {}) {
     // We can provide a static fallback to use before observable is completed
     // Good for testing, too
     this.apis = this.processDocs(fallback);
-
     // If no http is given, don't even attempt to connect
     if (this.http) {
+
       this.http.get<ApiModule>(this.docsApiUrl).subscribe(docs => {
         this.apis = this.processDocs(docs);
       });
@@ -39,7 +51,7 @@ export class DocsClient implements ReplyClient {
     const type = api.docType;
     const stableString = api.stability === 'stable' ? 'stable' : 'unstable';
     const barrel = api.barrel;
-    return `***[\`${title}\`](${link})*** is an **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
+    return `***[\`${title}\`](${link})*** is ${this.typePluralMapping[type]} **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
   }
 
   public commandSubtree: CommandNode = {
