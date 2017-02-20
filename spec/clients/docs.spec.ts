@@ -1,5 +1,5 @@
 import { DocsClient } from '../../src/docs/docs.client';
-import { MessageModel } from '../../src/angie/gitter';
+import { MessageModel } from '../../src/angie/gitter.models';
 import { MessageBuilder } from '../../src/util/message-builder';
 
 

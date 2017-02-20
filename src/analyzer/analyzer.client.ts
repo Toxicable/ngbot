@@ -1,5 +1,5 @@
 import {MessageBuilder} from '../util/message-builder';
-import {MessageModel} from '../angie/gitter';
+import {MessageModel} from '../angie/gitter.models';
 import {Analyzer} from './analyzer';
 import {getTextOutsideCodeBlocks} from '../util/formatting';
 

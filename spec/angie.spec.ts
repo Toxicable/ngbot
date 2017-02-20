@@ -2,8 +2,8 @@ import {Angie} from '../src/angie/angie';
 import {VersionsClient, VERSIONS_FALLBACK} from '../src/versions/versions.client';
 import {EventsClient} from '../src/events/events.client';
 import {DocsClient} from '../src/docs/docs.client';
-import {CommandTree} from '../src/angie/command-decoder';
-import {MessageModel} from '../src/angie/gitter';
+import {CommandTree} from '../src/command-tree/command-decoder';
+import {MessageModel} from '../src/angie/gitter.models';
 import {MessageBuilder} from '../src/util/message-builder';
 
 const commandTree: CommandTree = new CommandTree();

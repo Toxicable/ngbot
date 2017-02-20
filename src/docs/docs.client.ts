@@ -1,15 +1,15 @@
-import { MessageModel } from './../angie/gitter';
+import { DocsModule, DocsApi } from './docs.models';
+import { MessageModel } from './../angie/gitter.models';
 import {MessageBuilder} from '../util/message-builder';
 import {ReplyClient} from '../reply-client';
-import {ApiModule, Api} from './api-docs-module';
 import {Http} from '../util/http';
-import {CommandNode} from '../angie/command-decoder';
+import {CommandNode} from '../command-tree/command.models';
 
 export class DocsClient implements ReplyClient {
 
   private docsApiBaseUrl = 'https://angular.io/docs/ts/latest/api';
   private docsApiUrl = this.docsApiBaseUrl + '/api-list.json';
-  private apis: Api[];
+  private apis: DocsApi[];
 
   private typePluralMapping = {
     class: 'a',
@@ -32,20 +32,20 @@ export class DocsClient implements ReplyClient {
     // If no http is given, don't even attempt to connect
     if (this.http) {
 
-      this.http.get<ApiModule>(this.docsApiUrl).subscribe(docs => {
+      this.http.get<DocsModule>(this.docsApiUrl).subscribe(docs => {
         this.apis = this.processDocs(docs);
       });
     }
   }
 
-  private processDocs(docs): Api[] {
+  private processDocs(docs): DocsApi[] {
     return Object.keys(docs)
       .map(key => docs[key])
       // flatten out the modules into a single list of APIs
       .reduce((a, b) => [...a, ...b], [])
   }
 
-  private formatApiToMessage(api: Api): string {
+  private formatApiToMessage(api: DocsApi): string {
     const title = api.title;
     const link = `${this.docsApiBaseUrl}/${api.path}`;
     const type = api.docType;

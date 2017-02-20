@@ -1,5 +1,6 @@
-import { MessageModel } from './../src/angie/gitter';
-import {CommandNode, CommandTree, ParsingObject} from '../src/angie/command-decoder';
+import { CommandNode, ParsingObject } from './../src/command-tree/command.models';
+import { MessageModel } from './../src/angie/gitter.models';
+import {CommandTree} from '../src/command-tree/command-decoder';
 import {MessageBuilder} from '../src/util/message-builder';
 
 

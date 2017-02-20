@@ -1,8 +1,9 @@
+import {ParsingObject} from '../command-tree/command.models';
+import {CommandTree} from '../command-tree/command-decoder';
 import {Observable, Subscription} from 'rxjs';
 import {Http} from '../util/http';
-import {GitterClient, Message, MessageModel, User, Room} from './gitter';
+import {GitterClient, Message, MessageModel, User, Room} from './gitter.models';
 import * as Gitter from 'node-gitter';
-import {CommandTree, ParsingObject} from './command-decoder';
 
 export class Angie {
 

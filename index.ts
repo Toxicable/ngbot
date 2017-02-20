@@ -4,7 +4,7 @@ import { StoredReplyClient } from './src/stored-replies/stored-replies.client';
 import { DocsClient } from './src/docs/docs.client';
 import { Angie } from './src/angie/angie';
 import * as http from 'http';
-import {CommandTree} from './src/angie/command-decoder';
+import {CommandTree} from './src/command-tree/command-decoder';
 import {VersionsClient} from './src/versions/versions.client';
 
 console.log('Environment Variables:');

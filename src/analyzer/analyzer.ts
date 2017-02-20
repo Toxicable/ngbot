@@ -6,20 +6,6 @@ import {
   weightedAverage
 } from './utils';
 
-interface AnalysisWeights {
-  curlyBraces: number;
-  squareBrackets: number;
-  roundParenthesis: number;
-
-  semiColons: number;
-  semiColonsBeforeLineEnding: number;
-
-  dotsWithoutSpaceAfter: number;
-  uncommonCharacterSequences: number;
-
-  camelCase: number;
-}
-
 export const WEIGHTS: AnalysisWeights = {
   curlyBraces: 10,
   squareBrackets: 9,
@@ -34,30 +20,6 @@ export const WEIGHTS: AnalysisWeights = {
   camelCase: 6,
 };
 
-interface AnalysisResults {
-  characters: number; // with ''
-  words: number; // with \b
-  lines: number; // with \n
-
-  charactersPerLine: number[]; // for each line
-  averageCharactersPerLine: number; // average of above
-
-  wordsPerLine: number[]; // for each line
-  averageWordsPerLine: number; // average of above
-
-  semiColons: number; // some; stuff; here
-  semiColonsBeforeLineEnding: number; // foo;
-
-  curlyBraces: number; // {}
-  squareBrackets: number; // []
-  roundParenthesis: number; // ()
-
-  dotsWithoutSpaceAfter: number; // foo.bar
-  uncommonCharacterSequences: number; // +, *, &, |, <, >, ==, ===, !=, !==, >=, <=, =>
-
-  camelCase: number; // camelCase
-  underscoreCase: number; // under_score_case
-}
 
 export class Analyzer {
 
@@ -230,9 +192,6 @@ export class Analyzer {
 
   public isCode(text: string, weights: AnalysisWeights = WEIGHTS): boolean {
     const score = this.getScore(text, weights);
-    // console.log(`\n=== === === ===`);
-    // console.log(text, 'SCORE IS', score);
-    // console.log(`=== === === ===`);
     return score > 0.02;
   }
 

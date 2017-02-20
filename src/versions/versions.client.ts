@@ -1,10 +1,10 @@
+import { Version, GitHubApiListTag } from './versions.models';
 import {ReplyClient} from '../reply-client';
-import {MessageModel} from '../angie/gitter';
+import {MessageModel} from '../angie/gitter.models';
 import {MessageBuilder} from '../util/message-builder';
 import {Http} from '../util/http';
 import * as semver from 'semver';
-import {CommandNode} from '../angie/command-decoder';
-
+import {CommandNode} from '../command-tree/command.models';
 
 export const VERSIONS_FALLBACK = [
   {
@@ -45,32 +45,6 @@ export const VERSIONS_FALLBACK = [
   },
 ];
 
-export interface Version {
-  repo: {
-    name: string;
-    url: string;
-  };
-  versions: {
-    stable: {
-      name: string;
-      url: string;
-    };
-    edge: {
-      name: string;
-      url: string;
-    }
-  };
-}
-
-export interface GitHubApiListTag {
-  name: string;
-  commit: {
-    sha: string;
-    url: string;
-  };
-  zipball_url: string;
-  tarball_url: string;
-}
 
 export class VersionsClient implements ReplyClient {
 

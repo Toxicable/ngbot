@@ -1,6 +1,6 @@
-import { StoredReply } from './stored-reply';
+import { StoredReply } from './stored-reply.models';
 import { MessageBuilder } from './../util/message-builder';
-import { MessageModel } from '../angie/gitter';
+import { MessageModel } from '../angie/gitter.models';
 import { replies } from './replies';
 import { ReplyClient } from '../reply-client';
 

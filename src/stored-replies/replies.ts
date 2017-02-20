@@ -1,5 +1,5 @@
 /* tslint:disable:max-line-length */
-import { StoredReply } from './stored-reply';
+import { StoredReply } from './stored-reply.models';
 
 export const replies: StoredReply[] = [
   { keys: ['getting started'], message: `To get started with Angular, do [Quickstart](https://angular.io/docs/ts/latest/quickstart.html). After that, go through [Tour of Heroes (ToH)](https://angular.io/docs/ts/latest/tutorial/). Check the [Guide](https://angular.io/docs/ts/latest/guide/) for how to proceed { keys: [after that. Good (often advanced) blogs are [Thoughtram](http://blog.thoughtram.io/exploring-angular-2/) and [Victor Savkin's blog](https://vsavkin.com/). A good starting point for a project is [angular-cli](https://github.com/angular/angular-cli)`},
