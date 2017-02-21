@@ -1,22 +1,21 @@
 import { MessageModel } from './../angie/gitter.models';
-import {events} from './events';
-import {Event} from './events.models';
-import {MessageBuilder} from '../util/message-builder';
-import {CommandClient} from '../reply-client';
-import {CommandNode} from '../command-tree/command.models';
+import { events } from './events';
+import { Event } from './events.models';
+import { MessageBuilder } from '../util/message-builder';
+import { CommandClient } from '../reply-client';
+import { CommandNode } from '../command-tree/command.models';
 
 
 export class EventsClient implements CommandClient {
 
+  private mb: MessageBuilder = new MessageBuilder();
   events: Event[];
 
-  constructor(private mb: MessageBuilder = new MessageBuilder(),
-              fallback?: Event[]) {
-    if (fallback) {
-      this.events = fallback;
-    } else {
-      this.events = events;
-    }
+  constructor(
+    fallback?: Event[]
+    ) {
+      this.events = fallback || events;
+
   }
 
   public commandSubtree: CommandNode = {

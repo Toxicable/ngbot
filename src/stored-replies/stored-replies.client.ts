@@ -8,12 +8,13 @@ import { CommandClient } from '../reply-client';
 
 export class StoredReplyClient implements AnalyzerClient {
 
-  replies: StoredReply[];
+  private replies: StoredReply[];
+  private mb = new MessageBuilder()
 
   constructor(
-    private mb = new MessageBuilder()
+    fallback?: StoredReply[]
   ) {
-    this.replies = replies;
+    this.replies = fallback || replies;
   }
 
   getReply(message: MessageModel): MessageBuilder {

@@ -13,7 +13,8 @@ export class Angie {
   private lastMessagePostedAt: number = null;
 
 
-  constructor(private token: string,
+  constructor(
+    private token: string,
     private roomName: string,
     private isProd: boolean,
     private commandTree: CommandTree,
@@ -21,7 +22,6 @@ export class Angie {
     private throttleThreshold = 250,
     private http = new Http(),
     private gitter: GitterClient = new Gitter(token)
-
   ) {
     if (this.http) {
       this.start();

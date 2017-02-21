@@ -5,7 +5,7 @@ import { MessageBuilder } from '../../src/util/message-builder';
 
 describe(`Docs Client`, () => {
 
-  const client = new DocsClient(null, new MessageBuilder(), {
+  const client = new DocsClient(null, {
     '@angular/common': [
       {
         'title': 'AsyncPipe',

@@ -4,7 +4,7 @@ import {MessageBuilder} from '../../src/util/message-builder';
 
 describe(`Docs Client`, () => {
 
-  const client = new EventsClient(new MessageBuilder(),
+  const client = new EventsClient(
     [
       {
         name: 'conf-name',

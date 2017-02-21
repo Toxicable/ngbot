@@ -1,15 +1,16 @@
 import { DocsModule, DocsApi } from './docs.models';
 import { MessageModel } from './../angie/gitter.models';
-import {MessageBuilder} from '../util/message-builder';
-import {CommandClient} from '../reply-client';
-import {Http} from '../util/http';
-import {CommandNode} from '../command-tree/command.models';
+import { MessageBuilder } from '../util/message-builder';
+import { CommandClient } from '../reply-client';
+import { Http } from '../util/http';
+import { CommandNode } from '../command-tree/command.models';
 
 export class DocsClient implements CommandClient {
 
   private docsApiBaseUrl = 'https://angular.io/docs/ts/latest/api';
   private docsApiUrl = this.docsApiBaseUrl + '/api-list.json';
   private apis: DocsApi[];
+  private mb = new MessageBuilder();
 
   private typePluralMapping = {
     class: 'a',
@@ -23,9 +24,10 @@ export class DocsClient implements CommandClient {
     'type-alias': 'a'
   }
 
-  constructor(private http = new Http(),
-              private mb = new MessageBuilder(),
-              fallback = {}) {
+  constructor(
+    private http = new Http(),
+    fallback = {}
+    ) {
     // We can provide a static fallback to use before observable is completed
     // Good for testing, too
     this.apis = this.processDocs(fallback);

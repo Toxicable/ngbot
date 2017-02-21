@@ -1,6 +1,6 @@
 import { AnalyzerClient } from './../src/reply-client';
 import { Angie } from '../src/angie/angie';
-import { VersionsClient, VERSIONS_FALLBACK } from '../src/versions/versions.client';
+import { VersionsClient } from '../src/versions/versions.client';
 import { EventsClient } from '../src/events/events.client';
 import { DocsClient } from '../src/docs/docs.client';
 import { CommandTree } from '../src/command-tree/command-decoder';
@@ -9,7 +9,7 @@ import { MessageBuilder } from '../src/util/message-builder';
 
 const commandTree: CommandTree = new CommandTree();
 
-const docsClient = new DocsClient(null, new MessageBuilder(), {
+const docsClient = new DocsClient(null, {
   '@angular/common': [
     {
       'title': 'AsyncPipe',
@@ -31,7 +31,7 @@ const docsClient = new DocsClient(null, new MessageBuilder(), {
 }
 );
 
-const eventsClient = new EventsClient(new MessageBuilder(),
+const eventsClient = new EventsClient(
   [
     {
       name: 'conf-name',
@@ -54,10 +54,7 @@ const eventsClient = new EventsClient(new MessageBuilder(),
   ]
 );
 
-const versionsClient = new VersionsClient(new MessageBuilder(), null, VERSIONS_FALLBACK);
-
-
-const mockStoredRepliesClient: AnalyzerClient = {
+const mockAnalyzerClient: AnalyzerClient = {
   getReply(msg: MessageModel) {
     const mb = new MessageBuilder();
     if (msg.text.includes('angular3')) {
@@ -66,11 +63,10 @@ const mockStoredRepliesClient: AnalyzerClient = {
   }
 }
 
-const analyzers = [mockStoredRepliesClient];
+const analyzers = [mockAnalyzerClient];
 
 commandTree.registerSubCommand(docsClient.commandSubtree);
 commandTree.registerSubCommand(eventsClient.commandSubtree);
-commandTree.registerSubCommand(versionsClient.commandSubtree);
 
 const dummyMessage: MessageModel = {
   text: 'some text here'
@@ -84,15 +80,6 @@ describe(`Angie`, () => {
     dummyMessage.text = 'Hey guys, whens angular3 comming out?';
     const reply = angie.getReply(dummyMessage);
     expect(reply).toEqual('its Angular time!');
-  });
-
-  it(`should reply to a command 'angie version'`, () => {
-    dummyMessage.text = 'angie version';
-    const reply = angie.getReply(dummyMessage);
-    expect(reply).toEqual('[**`angular/angular`**](https://www.github.com/angular/angular) is at ' +
-      '[**2.4.7**](https://www.github.com/angular/angular/commit/e90661aaee5ff6580a52711e1b75795b7' +
-      '5cc9700) (and [4.0.0-beta.7](https://www.github.com/angular/angular/commit/09b4bd0dfbfda80' +
-      '0796f7dac0b0206e49243b23c))');
   });
 
   it(`should reply to a command 'Angie, give me docs for AsyncPipe'`, () => {
@@ -113,7 +100,7 @@ describe(`Angie`, () => {
     const reply = angie.getReply(dummyMessage);
     expect(reply).toBe('Based on `Hey Angie,` I figured you were actually giving me command for ' +
       '`angie`, but I have no idea what you mean by `what\'s up?`. I was expecting something ' +
-      'of the following: `help`, `docs`, `events`, `version`. Maybe you made a typo, or my ' +
+      'of the following: `help`, `docs`, `events`. Maybe you made a typo, or my ' +
       'creators @Toxicable and @lazarljubenovic made a mistake creating me! :sweat_smile:');
   });
 
