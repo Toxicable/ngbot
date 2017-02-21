@@ -1,4 +1,4 @@
-export interface StoredReply {
+export interface Explaination {
   keys: string[];
   message: string;
 }

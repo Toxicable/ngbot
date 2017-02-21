@@ -1,7 +1,7 @@
 /* tslint:disable:max-line-length */
-import { StoredReply } from './stored-reply.models';
+import { Explaination } from './explain.models';
 
-export const replies: StoredReply[] = [
+export const explanations: Explaination[] = [
   { keys: ['getting started'], message: `To get started with Angular, do [Quickstart](https://angular.io/docs/ts/latest/quickstart.html). After that, go through [Tour of Heroes (ToH)](https://angular.io/docs/ts/latest/tutorial/). Check the [Guide](https://angular.io/docs/ts/latest/guide/) for how to proceed { keys: [after that. Good (often advanced) blogs are [Thoughtram](http://blog.thoughtram.io/exploring-angular-2/) and [Victor Savkin's blog](https://vsavkin.com/). A good starting point for a project is [angular-cli](https://github.com/angular/angular-cli)`},
   { keys: ['not enough info'], message: `Please provide a brief description of what's going with the code. Pasting the error and saying "it's not working" doesn't help us help you. When did the problem start happening? Does it work if you remove/add some lines? Does it work in a different context? What have you tried so far?`},
   { keys: ['create plunker'], message: `It's very helpful to [create a plunker](http://plnkr.co/edit/tpl:AvJOMERrnz94ekVua0u5?p=catalogue) where you create a **minimal** reproduction of your problem, when possible. You're also likely to actually solve the problem yourself while doing so.`},

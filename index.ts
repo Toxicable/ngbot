@@ -1,7 +1,7 @@
+import { ExplainClient } from './src/explain/explain.client';
 import { FormattingAnalyzer } from './src/formatting/formatting.analyzer';
 import { AnalyzerClient } from './src/reply-client';
 import { EventsClient } from './src/events/events.client';
-import { StoredReplyClient } from './src/stored-replies/stored-replies.client';
 import { DocsClient } from './src/docs/docs.client';
 import { Angie } from './src/angie/angie';
 import * as http from 'http';
@@ -25,10 +25,10 @@ const commandTree: CommandTree = new CommandTree();
 commandTree.registerSubCommand(new DocsClient().commandSubtree);
 commandTree.registerSubCommand(new EventsClient().commandSubtree);
 commandTree.registerSubCommand(new VersionsClient().commandSubtree);
+commandTree.registerSubCommand(new ExplainClient().commandSubtree);
 
 const analyzerClients: AnalyzerClient[] = [
   new FormattingAnalyzer(),
-  new StoredReplyClient(),
 ];
 
 const bots = roomNames.split(',')
