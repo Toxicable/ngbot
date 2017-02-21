@@ -1,33 +1,34 @@
-import {Angie} from '../src/angie/angie';
-import {VersionsClient, VERSIONS_FALLBACK} from '../src/versions/versions.client';
-import {EventsClient} from '../src/events/events.client';
-import {DocsClient} from '../src/docs/docs.client';
-import {CommandTree} from '../src/command-tree/command-decoder';
-import {MessageModel} from '../src/angie/gitter.models';
-import {MessageBuilder} from '../src/util/message-builder';
+import { AnalyzerClient } from './../src/reply-client';
+import { Angie } from '../src/angie/angie';
+import { VersionsClient, VERSIONS_FALLBACK } from '../src/versions/versions.client';
+import { EventsClient } from '../src/events/events.client';
+import { DocsClient } from '../src/docs/docs.client';
+import { CommandTree } from '../src/command-tree/command-decoder';
+import { MessageModel } from '../src/angie/gitter.models';
+import { MessageBuilder } from '../src/util/message-builder';
 
 const commandTree: CommandTree = new CommandTree();
 
 const docsClient = new DocsClient(null, new MessageBuilder(), {
-    '@angular/common': [
-      {
-        'title': 'AsyncPipe',
-        'path': 'common/index/AsyncPipe-pipe.html',
-        'docType': 'pipe',
-        'stability': 'stable',
-        'secure': 'false',
-        'barrel': '@angular/common'
-      },
-      {
-        'title': 'CommonModule',
-        'path': 'common/index/CommonModule-class.html',
-        'docType': 'class',
-        'stability': 'stable',
-        'secure': 'false',
-        'barrel': '@angular/common',
-      },
-    ],
-  }
+  '@angular/common': [
+    {
+      'title': 'AsyncPipe',
+      'path': 'common/index/AsyncPipe-pipe.html',
+      'docType': 'pipe',
+      'stability': 'stable',
+      'secure': 'false',
+      'barrel': '@angular/common'
+    },
+    {
+      'title': 'CommonModule',
+      'path': 'common/index/CommonModule-class.html',
+      'docType': 'class',
+      'stability': 'stable',
+      'secure': 'false',
+      'barrel': '@angular/common',
+    },
+  ],
+}
 );
 
 const eventsClient = new EventsClient(new MessageBuilder(),
@@ -55,6 +56,18 @@ const eventsClient = new EventsClient(new MessageBuilder(),
 
 const versionsClient = new VersionsClient(new MessageBuilder(), null, VERSIONS_FALLBACK);
 
+
+const mockStoredRepliesClient: AnalyzerClient = {
+  getReply(msg: MessageModel) {
+    const mb = new MessageBuilder();
+    if (msg.text.includes('angular3')) {
+      return mb.message('its Angular time!');
+    }
+  }
+}
+
+const analyzers = [mockStoredRepliesClient];
+
 commandTree.registerSubCommand(docsClient.commandSubtree);
 commandTree.registerSubCommand(eventsClient.commandSubtree);
 commandTree.registerSubCommand(versionsClient.commandSubtree);
@@ -65,7 +78,13 @@ const dummyMessage: MessageModel = {
 
 describe(`Angie`, () => {
 
-  const angie = new Angie(null, null, true, commandTree, 0, null, null);
+  const angie = new Angie(null, null, true, commandTree, analyzers, 0, null, null);
+
+  it('should reply to a global analyzer', () => {
+    dummyMessage.text = 'Hey guys, whens angular3 comming out?';
+    const reply = angie.getReply(dummyMessage);
+    expect(reply).toEqual('its Angular time!');
+  });
 
   it(`should reply to a command 'angie version'`, () => {
     dummyMessage.text = 'angie version';

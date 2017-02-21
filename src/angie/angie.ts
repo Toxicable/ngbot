@@ -1,8 +1,9 @@
-import {ParsingObject} from '../command-tree/command.models';
-import {CommandTree} from '../command-tree/command-decoder';
-import {Observable, Subscription} from 'rxjs';
-import {Http} from '../util/http';
-import {GitterClient, Message, MessageModel, User, Room} from './gitter.models';
+import { AnalyzerClient } from './../reply-client';
+import { ParsingObject } from '../command-tree/command.models';
+import { CommandTree } from '../command-tree/command-decoder';
+import { Observable, Subscription } from 'rxjs';
+import { Http } from '../util/http';
+import { GitterClient, Message, MessageModel, User, Room } from './gitter.models';
 import * as Gitter from 'node-gitter';
 
 export class Angie {
@@ -13,12 +14,15 @@ export class Angie {
 
 
   constructor(private token: string,
-              private roomName: string,
-              private isProd: boolean,
-              private commandTree: CommandTree,
-              private throttleThreshold = 250,
-              private http = new Http(),
-              private gitter: GitterClient = new Gitter(token)) {
+    private roomName: string,
+    private isProd: boolean,
+    private commandTree: CommandTree,
+    private analyzers: AnalyzerClient[],
+    private throttleThreshold = 250,
+    private http = new Http(),
+    private gitter: GitterClient = new Gitter(token)
+
+  ) {
     if (this.http) {
       this.start();
     }
@@ -41,8 +45,8 @@ export class Angie {
 
       })
       .subscribe(() => {
-        },
-        error => console.log('ERROR: ' + error));
+      },
+      error => console.log('ERROR: ' + error));
   }
 
 
@@ -67,6 +71,13 @@ export class Angie {
 
 
   public getReply(message: MessageModel): string {
+
+    const analyzerReply = this.analyzers.map(c => c.getReply(message)).filter(mb => !!mb);
+    //TODO: use cooler syntax to do this :D
+    if (analyzerReply.length > 0) {
+      return analyzerReply[0].toString();
+    }
+
     const parsingObject = this.commandTree.getExe(message.text, message);
     if (!parsingObject.error.exists) {
       return parsingObject.commandFn().toString();

@@ -1,11 +1,11 @@
 import { DocsModule, DocsApi } from './docs.models';
 import { MessageModel } from './../angie/gitter.models';
 import {MessageBuilder} from '../util/message-builder';
-import {ReplyClient} from '../reply-client';
+import {CommandClient} from '../reply-client';
 import {Http} from '../util/http';
 import {CommandNode} from '../command-tree/command.models';
 
-export class DocsClient implements ReplyClient {
+export class DocsClient implements CommandClient {
 
   private docsApiBaseUrl = 'https://angular.io/docs/ts/latest/api';
   private docsApiUrl = this.docsApiBaseUrl + '/api-list.json';

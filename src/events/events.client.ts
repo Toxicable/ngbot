@@ -2,11 +2,11 @@ import { MessageModel } from './../angie/gitter.models';
 import {events} from './events';
 import {Event} from './events.models';
 import {MessageBuilder} from '../util/message-builder';
-import {ReplyClient} from '../reply-client';
+import {CommandClient} from '../reply-client';
 import {CommandNode} from '../command-tree/command.models';
 
 
-export class EventsClient implements ReplyClient {
+export class EventsClient implements CommandClient {
 
   events: Event[];
 

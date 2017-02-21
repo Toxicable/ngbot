@@ -1,11 +1,11 @@
-import {Analyzer} from '../src/analyzer/analyzer';
-import {getTextOutsideCodeBlocks} from '../src/util/formatting';
+import { FormattingAnalyzer } from './../../src/formatting/formatting.analyzer';
+import {getTextOutsideCodeBlocks} from '../../src/util/formatting';
 
 function isBetween(a: number, b: number): (value: number) => boolean {
   return value => a <= value && value < b;
 }
 
-const aly = new Analyzer();
+const aly = new FormattingAnalyzer();
 
 describe(`Analyzer :: Analysis results`, () => {
 

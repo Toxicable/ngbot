@@ -1,3 +1,6 @@
+import { AnalyzerClient } from './../reply-client';
+import { MessageBuilder } from './../util/message-builder';
+import { MessageModel } from './../angie/gitter.models';
 import {
   getNumberOfRegexMatches,
   isUppercase,
@@ -5,6 +8,7 @@ import {
   curryPercent,
   weightedAverage
 } from './utils';
+import { getTextOutsideCodeBlocks } from '../util/formatting';
 
 export const WEIGHTS: AnalysisWeights = {
   curlyBraces: 10,
@@ -21,7 +25,20 @@ export const WEIGHTS: AnalysisWeights = {
 };
 
 
-export class Analyzer {
+export class FormattingAnalyzer implements AnalyzerClient {
+
+  constructor(
+    private mb = new MessageBuilder()
+  ) { }
+
+  getReply(msg: MessageModel) {
+    const isCode = this.isCode(getTextOutsideCodeBlocks(msg.text));
+    if (isCode) {
+      return this.mb
+        .message('yo, there\'s code in that dude')
+        .tag(msg.fromUser.displayName);
+    }
+  }
 
   private getNumberOfCharacters(text: string): number {
     return text.length;

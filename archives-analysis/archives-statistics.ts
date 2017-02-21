@@ -10,7 +10,7 @@ function escape(text: string): string {
     ;
 }
 
-import {Analyzer} from '../src/analyzer/analyzer';
+import {FormattingAnalyzer} from '../src/formatting/formatting.analyzer';
 
 const archiveString: string =
   fs.readFileSync(__dirname + '/archives/archive-2017-01-26.html', 'utf8');
@@ -19,7 +19,7 @@ const $ = cheerio.load(archiveString);
 const messages: string[] =
   <any>Array.from($('.chat-app .chat-item__text').map((i, el) => $(el).text().trim()));
 
-const analyzer = new Analyzer();
+const analyzer = new FormattingAnalyzer();
 const stats = messages.map(message => {
   return Object.assign(
     {message: escape(message)},

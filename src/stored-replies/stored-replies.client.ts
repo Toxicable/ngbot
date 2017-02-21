@@ -1,11 +1,12 @@
+import { AnalyzerClient } from './../reply-client';
 import { StoredReply } from './stored-reply.models';
 import { MessageBuilder } from './../util/message-builder';
 import { MessageModel } from '../angie/gitter.models';
 import { replies } from './replies';
-import { ReplyClient } from '../reply-client';
+import { CommandClient } from '../reply-client';
 
 
-export class StoredReplyClient {
+export class StoredReplyClient implements AnalyzerClient {
 
   replies: StoredReply[];
 
@@ -15,8 +16,10 @@ export class StoredReplyClient {
     this.replies = replies;
   }
 
-  getGlobal(message: MessageModel) {
+  getReply(message: MessageModel): MessageBuilder {
+
     const text = message.text;
+    //TODO: replace with regex
     if (text.includes('angular3') || text.includes('angular 3')) {
       return this.mb.message(this.replies['angular3']);
     }
@@ -24,19 +27,6 @@ export class StoredReplyClient {
     if (text.includes('hello')) {
       return this.mb.message(`@${message.fromUser.username}: Hello!`);
     }
-    return null;
-  }
-
-  getReply(message: MessageModel): MessageBuilder {
-    const text = message.text;
-
-    if (text.includes('help')) {
-      return this.mb.message(
-        'Topics you can ask me about:' + this.replies.map(r => r.keys.join(' ')).join(', ') +
-        '. You can also as me for links to the docs with `angie docs`.'
-      );
-    }
-
     const reply = this.replies
       .find(r => {
         // TODO: allow for multiple keys

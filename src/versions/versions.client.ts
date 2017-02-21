@@ -1,5 +1,5 @@
 import { Version, GitHubApiListTag } from './versions.models';
-import {ReplyClient} from '../reply-client';
+import {CommandClient} from '../reply-client';
 import {MessageModel} from '../angie/gitter.models';
 import {MessageBuilder} from '../util/message-builder';
 import {Http} from '../util/http';
@@ -46,7 +46,7 @@ export const VERSIONS_FALLBACK = [
 ];
 
 
-export class VersionsClient implements ReplyClient {
+export class VersionsClient implements CommandClient {
 
   private githubApiBaseUrl = `https://api.github.com`;
 
