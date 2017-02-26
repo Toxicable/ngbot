@@ -54,45 +54,6 @@ const eventsClient = new EventsClient(
   ]
 );
 
-const versionsClient = new VersionsClient(null, [
-  {
-    name: 'g3_v2_0',
-    zipball_url: 'https://api.github.com/repos/angular/angular/zipball/g3_v2_0',
-    tarball_url: 'https://api.github.com/repos/angular/angular/tarball/g3_v2_0',
-    commit: {
-      sha: 'ca16fc29a640bd0201a5045ff128d3813088bdc0',
-      url: 'https://api.github.com/repos/angular/angular/commits/ca16fc29a640bd0201a5045ff128d3813088bdc0'
-    }
-  },
-  {
-    name: '4.0.0-beta.7',
-    zipball_url: 'https://api.github.com/repos/angular/angular/zipball/4.0.0-beta.7',
-    tarball_url: 'https://api.github.com/repos/angular/angular/tarball/4.0.0-beta.7',
-    commit: {
-      sha: '09b4bd0dfbfda800796f7dac0b0206e49243b23c',
-      url: 'https://api.github.com/repos/angular/angular/commits/09b4bd0dfbfda800796f7dac0b0206e49243b23c'
-    }
-  },
-  {
-    name: '2.4.7',
-    zipball_url: 'https://api.github.com/repos/angular/angular/zipball/2.4.7',
-    tarball_url: 'https://api.github.com/repos/angular/angular/tarball/2.4.7',
-    commit: {
-      sha: 'e90661aaee5ff6580a52711e1b75795b75cc9700',
-      url: 'https://api.github.com/repos/angular/angular/commits/e90661aaee5ff6580a52711e1b75795b75cc9700'
-    }
-  },
-  {
-    name: '2.4.6',
-    zipball_url: 'https://api.github.com/repos/angular/angular/zipball/2.4.6',
-    tarball_url: 'https://api.github.com/repos/angular/angular/tarball/2.4.6',
-    commit: {
-      sha: '343ee8a3a23dfcd171b018b8dfe85d571afccd6b',
-      url: 'https://api.github.com/repos/angular/angular/commits/343ee8a3a23dfcd171b018b8dfe85d571afccd6b'
-    }
-  },
-]);
-
 const mockAnalyzerClient: AnalyzerClient = {
   getReply(msg: MessageModel) {
     const mb = new MessageBuilder();
@@ -106,7 +67,6 @@ const analyzers = [mockAnalyzerClient];
 
 commandTree.registerSubCommand(docsClient.commandSubtree);
 commandTree.registerSubCommand(eventsClient.commandSubtree);
-commandTree.registerSubCommand(versionsClient.commandSubtree);
 
 const dummyMessage: MessageModel = {
   text: 'some text here'
@@ -115,15 +75,6 @@ const dummyMessage: MessageModel = {
 describe(`Angie`, () => {
 
   const angie = new Angie(null, null, true, commandTree, analyzers, 0, null, null);
-
-it(`should reply to a command 'angie version'`, () => {
-     dummyMessage.text = 'angie version';
-     const reply = angie.getReply(dummyMessage);
-     expect(reply).toEqual('[**`angular/angular`**](https://www.github.com/angular/angular) is at ' +
-       '[**2.4.7**](https://www.github.com/angular/angular/commit/e90661aaee5ff6580a52711e1b75795b7' +
-       '5cc9700) (and [4.0.0-beta.7](https://www.github.com/angular/angular/commit/09b4bd0dfbfda80' +
-      '0796f7dac0b0206e49243b23c))');
-   });
 
   it('should reply to a global analyzer', () => {
     dummyMessage.text = 'Hey guys, whens angular3 comming out?';
@@ -149,7 +100,7 @@ it(`should reply to a command 'angie version'`, () => {
     const reply = angie.getReply(dummyMessage);
     expect(reply).toBe('Based on `Hey Angie,` I figured you were actually giving me command for ' +
       '`angie`, but I have no idea what you mean by `what\'s up?`. I was expecting something ' +
-      'of the following: `help`, `docs`, `events`, `version`. Maybe you made a typo, or my ' +
+      'of the following: `help`, `docs`, `events`. Maybe you made a typo, or my ' +
       'creators @Toxicable and @lazarljubenovic made a mistake creating me! :sweat_smile:');
   });
 

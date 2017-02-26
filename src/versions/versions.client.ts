@@ -1,72 +1,55 @@
-import { Version, GitHubApiListTag } from './versions.models';
+import { Version } from './versions.models';
 import { CommandClient } from '../reply-client';
 import { MessageModel } from '../angie/gitter.models';
 import { MessageBuilder } from '../util/message-builder';
 import { Http } from '../util/http';
 import * as semver from 'semver';
 import { CommandNode } from '../command-tree/command.models';
+import { Observable } from 'rxjs'
+
 
 export class VersionsClient implements CommandClient {
 
-  private githubApiBaseUrl = `https://api.github.com`;
+  private registeryBaseUrl = `http://registry.npmjs.org`;
 
-  private repo: string = `angular/angular`;
+  private repos = [
+    '@angular/core',
+    '@angular/cli',
+    '@angular/material',
+    '@angular/app-shell',
+    '@angular/service-worker',
+    '@ngtools/webpack',
+    'angularfire2',
+    'zone.js',
+  ];
 
   private mb = new MessageBuilder();
 
   private versions: Version[] = [];
 
-  private processVersions(listTags: GitHubApiListTag[]): Version[] {
-    const latestStableVersion = listTags
-      .map(tag => tag.name)
-      .filter(tag => semver.valid(tag) && !semver.prerelease(tag))
-      .sort((a, b) => semver.gt(a, b) ? -1 : 1)[0];
+  private encodePackageName(name: string) {
+    return name.replace("/", "%2F");
+  }
 
-    const latestEdgeVersion = listTags
-      .map(tag => tag.name)
-      .filter(tag => semver.valid(tag) && !!semver.prerelease(tag))
-      .sort((a, b) => semver.gt(a, b) ? -1 : 1)[0];
+  private updateVersions() {
 
-    const stableSha: string = listTags.find(tag => tag.name === latestStableVersion).commit.sha;
-    const edgeSha: string = listTags.find(tag => tag.name === latestEdgeVersion).commit.sha;
-
-    const url = 'https://www.github.com/angular/angular';
-
-    return [
-      {
-        repo: {
-          name: this.repo,
-          url,
-        },
-        versions: {
-          stable: {
-            name: latestStableVersion,
-            url: `${url}/commit/${stableSha}`,
-          },
-          edge: {
-            name: latestEdgeVersion,
-            url: `${url}/commit/${edgeSha}`,
-          },
-        },
-      }
-    ];
+    return Observable.forkJoin(
+      ...this.repos
+      .map(name => this.encodePackageName(name))
+        .map(name => `${this.registeryBaseUrl}/${name}`)
+        .map(url => this.http.get<Version>(url))
+    )
   }
 
   constructor(
     private http = new Http(),
-    fallback?: GitHubApiListTag[]
   ) {
-    if (fallback) {
-      this.versions = this.processVersions(fallback);
-    }
-
-    if (this.http) {
-      const url: string = `${this.githubApiBaseUrl}/repos/${this.repo}/tags`;
-      const options = { url, headers: { 'User-Agent': 'lazarljubenovic' } };
-      this.http.get<GitHubApiListTag[]>(options)
-        .map(listTag => this.processVersions(listTag))
-        .subscribe(versions => this.versions = versions);
-    }
+    //1000 * 60 * 30 is 30 min.. I think :D
+    Observable.timer(0, 1000 * 60 * 30)
+      .flatMap(i => this.updateVersions())
+      .subscribe(versions => {
+        this.versions = versions
+      });
   }
 
   public commandSubtree: CommandNode = {
@@ -76,12 +59,15 @@ export class VersionsClient implements CommandClient {
     help: `Check out what's the current version of Angular`,
     fn: (msg: MessageModel, query?: string) => {
       const repos: string[] = this.versions.map(version => {
-        const nameLink = `[**\`${version.repo.name}\`**](${version.repo.url})`;
-        const stableLink = `[**${version.versions.stable.name}**](${version.versions.stable.url})`;
-        const edgeLink = `[${version.versions.edge.name}](${version.versions.edge.url})`;
-        return `${nameLink} is at ${stableLink} (and ${edgeLink})`;
-      });
-      return this.mb.message(repos.join('; '));
+        const latestVersion = version['dist-tags'].latest
+        const edgeVersion = version['dist-tags'].experimental || version['dist-tags'].next; 
+        const nameLink = `[**\`${version.name}\`**](${version.versions[latestVersion].homepage})`;
+        const stableLink = `[**${latestVersion}**](${''})`;
+        const edgeLink = `[${edgeVersion}](${''})`;
+       return `${nameLink} is at ${stableLink} (experimental:${edgeLink})`;
+     });
+     var output = repos.join('\n')
+      return this.mb.message(output);
     },
   };
 

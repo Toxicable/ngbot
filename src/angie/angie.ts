@@ -44,9 +44,7 @@ export class Angie {
           .do(message => this.handleIncomingMessage(room, message));
 
       })
-      .subscribe(() => {
-      },
-      error => console.log('ERROR: ' + error));
+      .subscribe();
   }
 
 
@@ -71,7 +69,9 @@ export class Angie {
 
 
   public getReply(message: MessageModel): string {
-
+    if(!this.isProd){
+      message.text = message.text.replace("test", "");
+    }
     const analyzerReply = this.analyzers.map(c => c.getReply(message)).filter(mb => !!mb);
     //TODO: use cooler syntax to do this :D
     if (analyzerReply.length > 0) {
