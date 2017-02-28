@@ -35,7 +35,7 @@ export class VersionsClient implements CommandClient {
 
     return Observable.forkJoin(
       ...this.repos
-      .map(name => this.encodePackageName(name))
+        .map(name => this.encodePackageName(name))
         .map(name => `${this.registeryBaseUrl}/${name}`)
         .map(url => this.http.get<Version>(url))
     )
@@ -54,19 +54,18 @@ export class VersionsClient implements CommandClient {
 
   public commandSubtree: CommandNode = {
     name: 'version',
-    regex: /^version/,
+    regex: /^(version|versions)\b/,
     children: null,
     help: `Check out what's the current version of Angular`,
     fn: (msg: MessageModel, query?: string) => {
       const repos: string[] = this.versions.map(version => {
         const latestVersion = version['dist-tags'].latest
-        const edgeVersion = version['dist-tags'].experimental || version['dist-tags'].next; 
+        const edgeVersion = version['dist-tags'].experimental || version['dist-tags'].next;
         const nameLink = `[**\`${version.name}\`**](${version.versions[latestVersion].homepage})`;
-        const stableLink = `[**${latestVersion}**](${''})`;
-        const edgeLink = `[${edgeVersion}](${''})`;
-       return `${nameLink} is at ${stableLink} (experimental:${edgeLink})`;
-     });
-     var output = repos.join('\n')
+        const stableLink = `**${latestVersion}**`;
+        return `${nameLink} is at ${stableLink} (experimental:${edgeVersion})`;
+      });
+      var output = repos.join('\n')
       return this.mb.message(output);
     },
   };
