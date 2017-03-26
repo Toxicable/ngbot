@@ -3,19 +3,19 @@
 # ngbot
 The chatbot for https://gitter.im/angular/angular
 
-##currently under renaming process
+## currently under renaming process
 
-#Commands
+# Commands
 `angie` - the primary keyword for the bot, most messages will have to suffixed by it to activate the bot
 `angie help {area}` - will display the help message for the area given
 
-#Areas
+# Areas
 `docs` - gives a brief summary of docs from angular.io 
 `versions` - shows the current version of Angular
 `events` - upcomming events for Angular
 `stored replies` - scripted replies for common mistakes or statements used when helping fellow developers
 
-#Development
+# Development
 Tests are done through Karma with `npm run test`
 To start the bot you will need the following envrioment variables
 
