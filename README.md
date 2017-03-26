@@ -10,9 +10,9 @@ The chatbot for https://gitter.im/angular/angular
 `angie help {area}` - will display the help message for the area given
 
 # Areas
-`docs` - gives a brief summary of docs from angular.io 
-`versions` - shows the current version of Angular
-`events` - upcomming events for Angular
+`docs` - gives a brief summary of docs from angular.io  
+`versions` - shows the current version of Angular  
+`events` - upcomming events for Angular  
 `stored replies` - scripted replies for common mistakes or statements used when helping fellow developers
 
 # Development
