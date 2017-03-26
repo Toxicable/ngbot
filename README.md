@@ -1,7 +1,9 @@
 [![Gitter](https://badges.gitter.im/angie-bot/Lobby.svg)](https://gitter.im/angie-bot/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-# AngieTheBot
-The chatbor for https://gitter.im/angular/angular
+# ngbot
+The chatbot for https://gitter.im/angular/angular
+
+##currently under renaming process
 
 #Commands
 `angie` - the primary keyword for the bot, most messages will have to suffixed by it to activate the bot
