@@ -12,7 +12,8 @@
     "build": "tsc && npm run lint",
     "deploy": "npm run build && gcloud app deploy --stop-previous-version",
     "clean": "rimraf src/**/*.js && rimraf src/**/*.map && rimraf spec/**/*.js && rimraf spec/**/*.map",
-    "test": "karma start",
+    "test": "karma start --single-run --browsers PhantomJS",
+    "test:watch": "karma start",
     "lint": "tslint spec/**/*.ts src/**/*.ts --force"
   },
   "author": "Fabian Wiles",
@@ -39,6 +40,7 @@
     "karma": "^1.4.1",
     "karma-chrome-launcher": "^2.0.0",
     "karma-jasmine": "^1.1.0",
+    "karma-phantomjs-launcher": "^1.0.4",
     "karma-typescript": "^2.1.7",
     "rimraf": "^2.5.4",
     "tslint": "^4.4.1"
