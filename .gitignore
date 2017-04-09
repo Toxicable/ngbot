@@ -7,7 +7,7 @@ npm-debug.log*
 
 app.yaml
 
-*.js
+src/**/*.js
 *.map
 .vscode/*
 
