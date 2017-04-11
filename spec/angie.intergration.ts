@@ -7,6 +7,7 @@ import { CommandTree } from '../src/command-tree/command-decoder';
 import { MessageModel } from '../src/angie/gitter.models';
 import { MessageBuilder } from '../src/util/message-builder';
 
+
 const commandTree: CommandTree = new CommandTree();
 
 const docsClient = new DocsClient(null, {
@@ -61,7 +62,7 @@ const mockAnalyzerClient: AnalyzerClient = {
       return mb.message('its Angular time!');
     }
   }
-}
+};
 
 const analyzers = [mockAnalyzerClient];
 

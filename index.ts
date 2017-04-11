@@ -8,6 +8,8 @@ import * as http from 'http';
 import {CommandTree} from './src/command-tree/command-decoder';
 import {VersionsClient} from './src/versions/versions.client';
 
+import 'core-js/shim.js';
+
 console.log('Environment Variables:');
 console.log('TOKEN: ' + process.env.TOKEN);
 console.log('NODE_ENV: ' + process.env.NODE_ENV);

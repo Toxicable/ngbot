@@ -69,7 +69,7 @@ export class Angie {
 
 
   public getReply(message: MessageModel): string {
-    if(!this.isProd){
+    if (!this.isProd) {
       message.text = message.text.replace("test", "");
     }
     const analyzerReply = this.analyzers.map(c => c.getReply(message)).filter(mb => !!mb);
