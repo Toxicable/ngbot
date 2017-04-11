@@ -1,5 +1,5 @@
 export function isUppercase(character: string): boolean {
-  if (!character) {
+  if (character === null) {
     return false;
   }
   return character === character.toUpperCase();
