@@ -1,4 +1,5 @@
 [![Gitter](https://badges.gitter.im/angie-bot/Lobby.svg)](https://gitter.im/angie-bot/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://api.travis-ci.org/Toxicable/ngbot.svg?branch=master)](https://travis-ci.org/Toxicable/ngbot)
 
 # ngbot
 The chatbot for https://gitter.im/angular/angular
