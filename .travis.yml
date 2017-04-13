@@ -31,11 +31,11 @@ before_deploy:
 - npm run build
 - cd dist
 
-# deploy:
-#   skip_cleanup: true
-#   provider: gae
-#   keyfile: ngbot-853199833b9e.json
-#   project: ngbot-164105
+deploy:
+  skip_cleanup: true
+  provider: gae
+  keyfile: ngbot-853199833b9e.json
+  project: ngbot-164105
 
 env:
   secure: RZfMEorTuDzZjq3hF7GUy/QA79gx6GumyHg5wIfeHULOZNjBslzcL7c1QB7cDKQ2AJ7M2LmJ+Grk9Bac5BpAkihsC4F5jdsBkToTTyPNbwfvp8enL1FJM7Om5MXNWzr0uCABOI3tBxZtJPFwoqniNohZoihqXnybW3hUTorm+bMKFNwe7ja4Vdq5R1WFJxHD7R9POWpfXUThshgjteGU4GAyavb6Lhy7rcJtxoM5pi1elE+sW037f7TAjatcdlz/pk5DlvpORTYXe2nAWQg5JZoJkON+o+37mNuKTf295ayTY3TKS8wrNC0IBFPMRm3RwiOgJtaPITKmBypsFHRDdgP3H2gI6RVgz8qMYyP1MVi01gz1Ou/RmHjfljRoxls8r31G56fj3AZ9huwo5fHJyeB8JT7jlD0FIUuP78/Moc3YP5VLBjtQCA7veefZ12U/WyxzeGxu83Zv//roTt30CmF3Wze+5iVpJJmcZ7oneZQEKzC7jjkhidGLy4ssJBXr19bl3Znb9rwtppd6aPewTtEjiqkQFu6pBsmne2TSA5ril8NO8xrqMDWfgkfN+MMhnE1gVGVHXEOoYHTQjx3DFzfJnwFtppxnlFF4Ilc8feeelvh57ViuQietwQbqDKufCyGp83Y8tnDHMEC9W7+zS3rAki+aAXO0fyesoBUQl/k=
