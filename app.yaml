@@ -1,0 +1,7 @@
+runtime: nodejs
+env: flex
+manual_scaling:
+  instances: 1
+env_variables:
+  NODE_ENV: 'prod'
+  ROOMS: 'ngbot/Lobby'

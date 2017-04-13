@@ -8,8 +8,6 @@ import * as http from 'http';
 import {CommandTree} from './src/command-tree/command-decoder';
 import {VersionsClient} from './src/versions/versions.client';
 
-import 'core-js/shim.js';
-
 console.log('Environment Variables:');
 console.log('TOKEN: ' + process.env.TOKEN);
 console.log('NODE_ENV: ' + process.env.NODE_ENV);
@@ -18,7 +16,7 @@ console.log('ROOMS: ' + process.env.ROOMS);
 const isProd = process.env.NODE_ENV === 'prod';
 
 // the default id for for the https://gitter.im/angie-bot/Lobby chat room for dev
-const roomNames: string = isProd ? process.env.ROOMS : 'angie-bot/Lobby';
+const roomNames: string = isProd ? process.env.ROOMS : 'ngbot/Lobby';
 
 
 const throttleThreshold = 250;

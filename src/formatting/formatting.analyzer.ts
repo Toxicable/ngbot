@@ -1,3 +1,4 @@
+import { AnalysisResults, AnalysisWeights } from './foramtting.models';
 import { AnalyzerClient } from './../reply-client';
 import { MessageBuilder } from './../util/message-builder';
 import { MessageModel } from './../angie/gitter.models';

@@ -14,7 +14,7 @@ module.exports = function (config) {
     },
     reporters: ['progress', "karma-typescript"],
     karmaTypescriptConfig: {
-      tsconfig: "./tsconfig.json",
+      tsconfig: "./tsconfig.spec.json",
     },
     port: 9876,
     colors: true,
@@ -23,17 +23,6 @@ module.exports = function (config) {
     browsers: ['Chrome'],
     singleRun: false,
     concurrency: Infinity,
-    customLaunchers: {
-      Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
-    },
   };
-
-  if (process.env.TRAVIS) {
-   // configuration.browsers = ['Chrome_travis_ci'];
-  }
-
   config.set(configuration);
 }

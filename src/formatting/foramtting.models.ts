@@ -1,4 +1,4 @@
-interface AnalysisResults {
+export interface AnalysisResults {
   characters: number; // with ''
   words: number; // with \b
   lines: number; // with \n
@@ -23,7 +23,7 @@ interface AnalysisResults {
   underscoreCase: number; // under_score_case
 }
 
-interface AnalysisWeights {
+export interface AnalysisWeights {
   curlyBraces: number;
   squareBrackets: number;
   roundParenthesis: number;
