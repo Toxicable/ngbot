@@ -1,7 +1,7 @@
 import { AnalysisResults, AnalysisWeights } from './foramtting.models';
 import { AnalyzerClient } from './../reply-client';
 import { MessageBuilder } from './../util/message-builder';
-import { MessageModel } from './../angie/gitter.models';
+import { MessageModel } from './../bot/gitter.models';
 import {
   getNumberOfRegexMatches,
   isUppercase,

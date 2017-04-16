@@ -1,10 +1,10 @@
 import { MessageBuilder } from './util/message-builder';
-import { MessageModel } from './angie/gitter.models';
+import { MessageModel } from './bot/gitter.models';
 import { Observable } from 'rxjs';
-import {CommandNode} from './command-tree/command.models';
+import {CommandNode} from './command-tree/command-decoder2';
 
 export interface CommandClient {
-  commandSubtree: CommandNode;
+  commandNode: CommandNode;
 }
 
 export interface AnalyzerClient {

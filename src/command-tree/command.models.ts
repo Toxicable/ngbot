@@ -1,5 +1,5 @@
 import { MessageBuilder } from './../util/message-builder';
-import { MessageModel } from '../angie/gitter.models';
+import { MessageModel } from '../bot/gitter.models';
 
 export type CommandFn = (msg?: MessageModel, query?: string) => MessageBuilder;
 

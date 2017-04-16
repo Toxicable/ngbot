@@ -9,26 +9,26 @@ describe('explain client', () => {
   ]);
 
   it('should reply to help', () => {
-    const actual: string = client.commandSubtree.children[0].help;
-    const expected: string = `Ask me to explain different topics, for example: \`angie explain getting started\``;
+    const actual = client.commandNode.commandFn({text: 'explain'}).toString();
+    const expected = 'Ask me to explain different topics, for example: `explain getting started`';
     expect(actual).toEqual(expected);
   })
 
   it('should get a basic reply', () => {
-    const actual: string = client.commandSubtree.children[0].fn({text: 'angie explain hllo'}, 'hello').toString();
-    const expected: string = `greetings`;
+    const actual = client.commandNode.children[0].commandFn({text: 'angie explain hello'}).toString();
+    const expected = `greetings`;
     expect(actual).toEqual(expected);
   })
 
   it('should find a Explaination with multiple words', () => {
-    const actual: string = client.commandSubtree.children[0].fn({text: 'angie explain two words'}, 'two words').toString();
-    const expected: string = `explain two words`;
+    const actual = client.commandNode.children[0].commandFn({text: 'angie explain two words'}).toString();
+    const expected = `explain two words`;
     expect(actual).toEqual(expected);
   })
 
   it('should match on second key', () => {
-    const actual: string = client.commandSubtree.children[0].fn({text: 'angie explain secondkey'}, 'secondkey').toString();
-    const expected: string = `multi key explaination`;
+    const actual = client.commandNode.children[0].commandFn({text: 'angie explain secondkey'}).toString();
+    const expected = `multi key explaination`;
     expect(actual).toEqual(expected);
   })
 

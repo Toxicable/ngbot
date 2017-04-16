@@ -1,5 +1,5 @@
-import marked = require('marked');
-import cheerio = require('cheerio');
+import * as marked from 'marked';
+import * as cheerio from 'cheerio';
 
 
 export function getTextOutsideCodeBlocks(message: string): any {

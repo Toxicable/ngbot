@@ -1,5 +1,5 @@
 import { MessageBuilder } from './../util/message-builder';
-import { MessageModel } from './../angie/gitter.models';
+import { MessageModel } from './../bot/gitter.models';
 
 export class CommandDecoder2 {
   constructor(
@@ -22,47 +22,42 @@ export class CommandDecoder2 {
   }
 
   private getMatch(message: MessageModel, node: CommandNode): CommandFn {
-    //if it has a matcher than it's
-    //probably at the bottom of the tree
-    if (node.matcher) {
-      //return this fn only if we get a match
-      if (node.matcher.test(message.text)) {
-        return node.commandFn;
-      } else {
-        return null;
-      }
-    } else {
-      //only one of these should match
-      //so return the first match
-      for (const subNode of node.children) {
-        const childMatch = this.getMatch(message, subNode);
-        if (childMatch) {
-          return childMatch;
+    if (node.matcher.test(message.text)) {
+      if (node.children.length !== 0) {
+        for (const subNode of node.children) {
+          const childMatch = this.getMatch(message, subNode);
+          if (childMatch) {
+            return childMatch;
+          }
         }
+      } else {
+        return node.commandFn;
       }
     }
   }
-
 }
 
 export class CommandNodeBuilder {
-  node: CommandNode = {
-    helpFn: null,
+  private node: CommandNode = {
     commandFn: null,
     matcher: null,
     children: [],
   };
-  withCommand(regex: RegExp, commandFn: CommandFn) {
+  withCommand(regex: RegExp, commandFn: CommandFn ) {
     this.node.matcher = regex;
     this.node.commandFn = commandFn;
     return this;
   }
-  withHelp(helpFn: HelpFn) {
-    this.node.helpFn = helpFn;
+  withChildren(nodes: CommandNode[]) {
+    this.node.children = nodes;
     return this;
   }
-  withChildren(children: CommandNode[]) {
-    this.node.children = children;
+  withChild(childBuilderFn: (builder: CommandNodeBuilder) => CommandNodeBuilder) {
+    this.node.children.push(childBuilderFn(new CommandNodeBuilder).toNode());
+    return this;
+  }
+  withName(name: string){
+    this.node.name = name;
     return this;
   }
   toNode() {
@@ -71,11 +66,10 @@ export class CommandNodeBuilder {
 }
 
 export type CommandFn = (message: MessageModel) => MessageBuilder;
-export type HelpFn = () => MessageBuilder;
 
 export interface CommandNode {
-  helpFn: HelpFn;
   commandFn: CommandFn;
   matcher: RegExp;
   children: CommandNode[];
+  name?: string;
 }

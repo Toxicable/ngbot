@@ -1,9 +1,9 @@
+import { MessageBuilder } from './../util/message-builder';
 import { DocsModule, DocsApi } from './docs.models';
-import { MessageModel } from './../angie/gitter.models';
-import { MessageBuilder } from '../util/message-builder';
+import { MessageModel } from './../bot/gitter.models';
 import { CommandClient } from '../reply-client';
 import { Http } from '../util/http';
-import { CommandNode } from '../command-tree/command.models';
+import { CommandNode, CommandNodeBuilder } from '../command-tree/command-decoder2';
 
 export class DocsClient implements CommandClient {
 
@@ -24,22 +24,6 @@ export class DocsClient implements CommandClient {
     'type-alias': 'a'
   }
 
-  constructor(
-    private http = new Http(),
-    fallback = {}
-    ) {
-    // We can provide a static fallback to use before observable is completed
-    // Good for testing, too
-    this.apis = this.processDocs(fallback);
-    // If no http is given, don't even attempt to connect
-    if (this.http) {
-
-      this.http.get<DocsModule>(this.docsApiUrl).subscribe(docs => {
-        this.apis = this.processDocs(docs);
-      });
-    }
-  }
-
   private processDocs(docs): DocsApi[] {
     return Object.keys(docs)
       .map(key => docs[key])
@@ -55,35 +39,38 @@ export class DocsClient implements CommandClient {
     const barrel = api.barrel;
     return `***[\`${title}\`](${link})*** is ${this.typePluralMapping[type]} **${type}** found in \`${barrel}\` and is considered *${stableString}*.`;
   }
+  constructor(
+    private http = new Http(),
+  ) {
+    this.http.get<DocsModule>(this.docsApiUrl).subscribe(docs => {
+      this.apis = this.processDocs(docs);
+    });
 
-  public commandSubtree: CommandNode = {
-    name: 'docs',
-    regex: /^(give\s+me\s+|get\s+|get\s+me\s+)?\s*docs(\sfor)?/i,
-    fn: null,
-    help: null,
-    children: [
-      {
-        name: ':query',
-        regex: null,
-        children: null,
-        help: 'Search the [API Reference](https://angular.io/docs/ts/latest/api)',
-        fn: (msg: MessageModel, query: string = '') => {
-          const matchedApi = this.apis.find(api => {
-            return query.toLowerCase().includes(api.title.toLowerCase());
-          });
+    this.commandNode = new CommandNodeBuilder()
+      .withCommand(/(give\s+me\s+|get\s+|get\s+me\s+)?\s*docs(\sfor)?/i,
+      msg => new MessageBuilder(`Search the [API Reference](https://angular.io/docs/ts/latest/api)`)
+      )
+      .withName('docs')
+      .withChild(b => b.withCommand(/\w/, this.command))
+      .toNode();
+  }
 
-          let reply: string;
-          if (matchedApi) {
-            reply = this.formatApiToMessage(matchedApi);
-          } else {
-            reply = `Aww, bummer :anguished: Looks like you wanted docs for _${query}_, but I ` +
-              `couldn't find anything. Might be a good idea to look directly at ` +
-              `[API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
-          }
-          return this.mb.message(reply);
-        }
-      }
-    ]
-  };
+  commandNode: CommandNode;
 
+  command = (msg: MessageModel) => {
+    const query = msg.text.replace(this.commandNode.matcher, '');
+    const matchedApi = this.apis.find(api => {
+      return query.toLowerCase().includes(api.title.toLowerCase());
+    });
+
+    let reply: string;
+    if (matchedApi) {
+      reply = this.formatApiToMessage(matchedApi);
+    } else {
+      reply = `Aww, bummer :anguished: Looks like you wanted docs for _${query}_, but I ` +
+        `couldn't find anything. Might be a good idea to look directly at ` +
+        `[API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
+    }
+    return this.mb.message(reply);
+  }
 }

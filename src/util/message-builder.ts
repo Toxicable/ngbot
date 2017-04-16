@@ -6,6 +6,10 @@ export class MessageBuilder {
     this.replyMessage = message;
   }
 
+  builder() {
+    return this;
+  }
+
   tag(user: string): this {
     this.taggedUser = user;
     return this;
