@@ -1,36 +1,37 @@
+import { MockHttp } from './mock-utils';
 import { VersionsClient } from './../src/versions/versions.client';
 import { AnalyzerClient } from './../src/reply-client';
-import { Angie } from '../src/angie/angie';
+import { Bot } from '../src/bot/bot';
 import { EventsClient } from '../src/events/events.client';
 import { DocsClient } from '../src/docs/docs.client';
-import { CommandTree } from '../src/command-tree/command-decoder';
-import { MessageModel } from '../src/angie/gitter.models';
+import { MessageModel } from '../src/bot/gitter.models';
 import { MessageBuilder } from '../src/util/message-builder';
 
 
-const commandTree: CommandTree = new CommandTree();
+const mockDocsHttp = new MockHttp(
+  {
+    '@angular/common': [
+      {
+        'title': 'AsyncPipe',
+        'path': 'common/index/AsyncPipe-pipe.html',
+        'docType': 'pipe',
+        'stability': 'stable',
+        'secure': 'false',
+        'barrel': '@angular/common'
+      },
+      {
+        'title': 'CommonModule',
+        'path': 'common/index/CommonModule-class.html',
+        'docType': 'class',
+        'stability': 'stable',
+        'secure': 'false',
+        'barrel': '@angular/common',
+      },
+    ],
+  }
+)
 
-const docsClient = new DocsClient(null, {
-  '@angular/common': [
-    {
-      'title': 'AsyncPipe',
-      'path': 'common/index/AsyncPipe-pipe.html',
-      'docType': 'pipe',
-      'stability': 'stable',
-      'secure': 'false',
-      'barrel': '@angular/common'
-    },
-    {
-      'title': 'CommonModule',
-      'path': 'common/index/CommonModule-class.html',
-      'docType': 'class',
-      'stability': 'stable',
-      'secure': 'false',
-      'barrel': '@angular/common',
-    },
-  ],
-}
-);
+const docsClient = new DocsClient(mockDocsHttp)
 
 const eventsClient = new EventsClient(
   [
@@ -64,18 +65,19 @@ const mockAnalyzerClient: AnalyzerClient = {
   }
 };
 
-const analyzers = [mockAnalyzerClient];
-
-commandTree.registerSubCommand(docsClient.commandSubtree);
-commandTree.registerSubCommand(eventsClient.commandSubtree);
+const replyClients = [
+  docsClient,
+  eventsClient,
+]
+const analyzerClients = [mockAnalyzerClient];
 
 const dummyMessage: MessageModel = {
   text: 'some text here'
 };
 
-describe(`Angie`, () => {
+describe(`Bot`, () => {
 
-  const angie = new Angie(null, null, true, commandTree, analyzers, 0, null, null);
+  const angie = new Bot({ token: null, roomName: null, isProd: false, replyClients, analyzerClients });
 
   it('should reply to a global analyzer', () => {
     dummyMessage.text = 'Hey guys, whens angular3 comming out?';
@@ -84,7 +86,7 @@ describe(`Angie`, () => {
   });
 
   it(`should reply to a command 'Angie, give me docs for AsyncPipe'`, () => {
-    dummyMessage.text = 'Angie, give me docs for AsyncPipe';
+    dummyMessage.text = 'ngbot, give me docs for AsyncPipe';
     const reply = angie.getReply(dummyMessage);
     expect(reply).toEqual('***[`AsyncPipe`](https://angular.io/docs/ts/latest/api/co' +
       'mmon/index/AsyncPipe-pipe.html)*** is a **pipe** found in `@angular/common` and is considered *stable*.');
@@ -97,12 +99,9 @@ describe(`Angie`, () => {
   });
 
   it(`should handle bad command 'angie what's up?'`, () => {
-    dummyMessage.text = `Hey Angie, what's up?`;
+    dummyMessage.text = `Hey ngbot, what's up?`;
     const reply = angie.getReply(dummyMessage);
-    expect(reply).toBe('Based on `Hey Angie,` I figured you were actually giving me command for ' +
-      '`angie`, but I have no idea what you mean by `what\'s up?`. I was expecting something ' +
-      'of the following: `help`, `docs`, `events`. Maybe you made a typo, or my ' +
-      'creators @Toxicable and @lazarljubenovic made a mistake creating me! :sweat_smile:');
+    expect(reply).toBe(`Sorry, I'm not sure what you wanted from me.`);
   });
 
 });

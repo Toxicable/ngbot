@@ -1,4 +1,4 @@
-import util = require('../src/util/formatting');
+import * as util from '../src/util/formatting';
 
 describe(`getTextOutsideCodeBlock`, () => {
 

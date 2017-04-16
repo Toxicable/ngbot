@@ -1,11 +1,10 @@
+import { MockHttp } from './../mock-utils';
 import { DocsClient } from '../../src/docs/docs.client';
-import { MessageModel } from '../../src/angie/gitter.models';
+import { MessageModel } from '../../src/bot/gitter.models';
 import { MessageBuilder } from '../../src/util/message-builder';
 
-
-describe(`Docs Client`, () => {
-
-  const client = new DocsClient(null, {
+const mockHttp = new MockHttp(
+ {
     '@angular/common': [
       {
         'title': 'AsyncPipe',
@@ -25,16 +24,27 @@ describe(`Docs Client`, () => {
       },
     ],
   }
-  );
+);
+
+describe(`Docs Client`, () => {
+
+  const client = new DocsClient(mockHttp);
+
+  it('should match docs with different wording', () => {
+    const matched = client.commandNode.matcher.test('docs');
+    expect(matched).toEqual(true);
+  })
 
   it('should contain link to correct API', () => {
-    const actual: string = client.commandSubtree.children[0].fn({ text: 'AsyncPipe' }, 'AsyncPipe').toString();
-    const expected: string = 'https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html';
-    expect(actual).toContain(expected);
+    const msg = {text: 'AsyncPipe'};
+    const actual: string = client.commandNode.children[0].commandFn(msg).toString();
+    const expected = 'https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html';
+    expect(client.command(msg).toString()).toContain(expected);
   })
 
   it(`should get docs for an existing entry`, () => {
-    const actual: string = client.commandSubtree.children[0].fn({ text: 'AsyncPipe' }, 'AsyncPipe').toString();
+    const msg = {text: 'AsyncPipe'};
+    const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected: string = `***[\`AsyncPipe\`](https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html)` +
       `*** is a **pipe** found in \`@angular/common\` and ` +
       `is considered *stable*.`;
@@ -42,7 +52,8 @@ describe(`Docs Client`, () => {
   });
 
   it(`should provide a helpful message if docs don't exist`, () => {
-    const actual: string = client.commandSubtree.children[0].fn({ text: 'nonsense' }, 'nonsense').toString();
+    const msg = {text: 'nonsense'};
+    const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for _nonsense_, ` +
       `but I couldn't find anything. Might be a good idea to look directly at ` +
       `[API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
@@ -50,7 +61,8 @@ describe(`Docs Client`, () => {
   });
 
   it(`should provide a helpful message if docs don't exist (for more than one word)`, () => {
-    const actual: string = client.commandSubtree.children[0].fn({ text: 'some nonsense here' }, 'some nonsense here').toString();
+    const msg = {text: 'some nonsense here'};
+    const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for ` +
       `_some nonsense here_, but I couldn't find anything. Might be a good idea ` +
       `to look directly at [API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
