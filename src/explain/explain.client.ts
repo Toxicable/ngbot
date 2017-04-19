@@ -5,6 +5,7 @@ import { MessageBuilder } from './../util/message-builder';
 import { MessageModel } from '../bot/gitter.models';
 import { explanations } from './explanations';
 import { CommandClient } from '../reply-client';
+import { getQuery } from "../util/string-helpers";
 
 
 export class ExplainClient implements CommandClient {
@@ -26,7 +27,7 @@ export class ExplainClient implements CommandClient {
   }
 
   command = (msg: MessageModel) => {
-    const query = msg.text.replace(this.commandNode.matcher, '');
+    const query = getQuery(this.commandNode.matcher, msg.text);
     const reply = this.findExplaination(query);
     return reply ? this.mb.message(reply.message) : this.mb.message(`Oops! :flushed: I don't know how to explain _${query}_.`);
   }
@@ -40,7 +41,7 @@ export class ExplainClient implements CommandClient {
       .withCommand(/explain/, msg => new MessageBuilder('Ask me to explain different topics, for example: `explain getting started`'))
       .withChild(builder => builder.withCommand(/\w/, this.command))
       .withName('explain')
-      .toNode()
+      .toNode();
 
   }
 

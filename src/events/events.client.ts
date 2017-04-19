@@ -4,6 +4,7 @@ import { Event } from './events.models';
 import { MessageBuilder } from '../util/message-builder';
 import { CommandClient } from '../reply-client';
 import { CommandNode, CommandNodeBuilder } from '../command-tree/command-decoder2';
+import { getQuery } from "../util/string-helpers";
 
 
 export class EventsClient implements CommandClient {
@@ -15,11 +16,9 @@ export class EventsClient implements CommandClient {
     fallback?: Event[]
   ) {
     this.events = fallback || events;
+    this.eventsList = `Events for this year include ${this.events.map(e => `[${e.name}](${e.link})`).join(', ')}.`;
     this.commandNode = new CommandNodeBuilder()
-      .withCommand(/events/, msg => {
-        const upcomingEvents = this.events.map(e => `[${e.name}](${e.link})`).join(', ');
-        return this.mb.message(`Events for this year include ${upcomingEvents}.`);
-      })
+      .withCommand(/(events|event)/, msg => this.mb.message(this.eventsList))
       .withName('events')
       .withChild(b => b.withCommand(/\w/, this.command))
       .toNode();
@@ -27,8 +26,15 @@ export class EventsClient implements CommandClient {
 
   commandNode: CommandNode;
 
+  private eventsList: string;
+
   private command = (msg: MessageModel) => {
-    const query = msg.text.replace(this.commandNode.matcher, '');
+    const query = getQuery(this.commandNode.matcher, msg.text);
+
+    if(!query){
+      return this.mb.message(this.eventsList);
+    }
+
     const event = this.events.find(e => e.name.toLowerCase() === query.toLowerCase());
 
     if (!event) {

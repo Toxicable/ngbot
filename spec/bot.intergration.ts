@@ -101,7 +101,8 @@ describe(`Bot`, () => {
   it(`should handle bad command 'angie what's up?'`, () => {
     dummyMessage.text = `Hey ngbot, what's up?`;
     const reply = angie.getReply(dummyMessage);
-    expect(reply).toBe(`Sorry, I'm not sure what you wanted from me.`);
+    const expected = `Hello, I'm ngbot. The current areas you can ask me about are: \`c.commandNode.name\`, \`c.commandNode.name\`.`;
+    expect(reply).toEqual(expected);
   });
 
 });

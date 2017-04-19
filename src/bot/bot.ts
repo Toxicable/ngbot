@@ -24,9 +24,11 @@ export class Bot {
 
   private start() {
     this.commandNode = new CommandNodeBuilder()
-      .withCommand(/ngbot/, (msg) => {
+      .withCommand(/(ngbot|ng bot)/, (msg) => {
         return new MessageBuilder()
-          .message(`Hello, I'm ngbot. The current areas you can ask me about are: ${this.config.replyClients.map(c => `\`c.commandNode.name\``).join(', ')}.`)
+          .message(`Hello, I'm ngbot. The current areas you can ask me about are: ${
+            this.config.replyClients.map(c => `\`c.commandNode.name\``).join(', ')
+          }.`)
       })
       .withChildren(this.config.replyClients.map(client => client.commandNode))
       .toNode();

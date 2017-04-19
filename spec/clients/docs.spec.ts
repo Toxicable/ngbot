@@ -36,14 +36,14 @@ describe(`Docs Client`, () => {
   })
 
   it('should contain link to correct API', () => {
-    const msg = {text: 'AsyncPipe'};
+    const msg = {text: 'docs AsyncPipe'};
     const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected = 'https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html';
     expect(client.command(msg).toString()).toContain(expected);
   })
 
   it(`should get docs for an existing entry`, () => {
-    const msg = {text: 'AsyncPipe'};
+    const msg = {text: 'docs AsyncPipe'};
     const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected: string = `***[\`AsyncPipe\`](https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html)` +
       `*** is a **pipe** found in \`@angular/common\` and ` +
@@ -52,7 +52,7 @@ describe(`Docs Client`, () => {
   });
 
   it(`should provide a helpful message if docs don't exist`, () => {
-    const msg = {text: 'nonsense'};
+    const msg = {text: 'docs nonsense'};
     const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for _nonsense_, ` +
       `but I couldn't find anything. Might be a good idea to look directly at ` +
@@ -61,7 +61,7 @@ describe(`Docs Client`, () => {
   });
 
   it(`should provide a helpful message if docs don't exist (for more than one word)`, () => {
-    const msg = {text: 'some nonsense here'};
+    const msg = {text: 'docs some nonsense here'};
     const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for ` +
       `_some nonsense here_, but I couldn't find anything. Might be a good idea ` +

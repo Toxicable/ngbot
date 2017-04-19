@@ -2,7 +2,7 @@ import {EventsClient} from '../../src/events/events.client';
 import {MessageBuilder} from '../../src/util/message-builder';
 
 
-describe(`Docs Client`, () => {
+describe(`Event Client`, () => {
 
   const client = new EventsClient(
     [
@@ -35,19 +35,19 @@ describe(`Docs Client`, () => {
   });
 
   it(`should find a concrete event`, () => {
-    const actual: string = client.commandNode.children[0].commandFn({text: 'conf-name'}).toString();
+    const actual: string = client.commandNode.children[0].commandFn({text: 'event conf-name'}).toString();
     const expected: string = `[conf-name](www.google.com): located at conf location Thu Jan 01 1970`;
     expect(actual).toEqual(expected);
   });
 
   it(`should reply with a helpful hint when conference name is not found`, () => {
-    const actual: string = client.commandNode.children[0].commandFn({text: 'random name'}).toString();
+    const actual: string = client.commandNode.children[0].commandFn({text: 'event random name'}).toString();
     const expected: string = `Oops! :flushed: I don't know about an event named _random name_.`;
     expect(actual).toEqual(expected);
   });
 
   it(`should find an event with a space in name`, () => {
-    const actual: string = client.commandNode.children[0].commandFn({text: 'conf name with a space'}).toString();
+    const actual: string = client.commandNode.children[0].commandFn({text: 'event conf name with a space'}).toString();
     const expected: string = `[conf name with a space](www.google.co.nz): located at some spacey place Thu Jan 01 1970`;
     expect(actual).toEqual(expected);
   });

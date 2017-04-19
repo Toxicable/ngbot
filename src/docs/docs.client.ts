@@ -4,6 +4,7 @@ import { MessageModel } from './../bot/gitter.models';
 import { CommandClient } from '../reply-client';
 import { Http } from '../util/http';
 import { CommandNode, CommandNodeBuilder } from '../command-tree/command-decoder2';
+import { getQuery } from "../util/string-helpers";
 
 export class DocsClient implements CommandClient {
 
@@ -58,7 +59,7 @@ export class DocsClient implements CommandClient {
   commandNode: CommandNode;
 
   command = (msg: MessageModel) => {
-    const query = msg.text.replace(this.commandNode.matcher, '');
+    const query = getQuery(this.commandNode.matcher, msg.text);
     const matchedApi = this.apis.find(api => {
       return query.toLowerCase().includes(api.title.toLowerCase());
     });

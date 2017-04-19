@@ -24,11 +24,15 @@ export class CommandDecoder2 {
   private getMatch(message: MessageModel, node: CommandNode): CommandFn {
     if (node.matcher.test(message.text)) {
       if (node.children.length !== 0) {
+        let childMatch;
         for (const subNode of node.children) {
-          const childMatch = this.getMatch(message, subNode);
+          childMatch = this.getMatch(message, subNode);
           if (childMatch) {
             return childMatch;
           }
+        }
+        if (!childMatch) {
+          return node.commandFn;
         }
       } else {
         return node.commandFn;
@@ -43,7 +47,7 @@ export class CommandNodeBuilder {
     matcher: null,
     children: [],
   };
-  withCommand(regex: RegExp, commandFn: CommandFn ) {
+  withCommand(regex: RegExp, commandFn: CommandFn) {
     this.node.matcher = regex;
     this.node.commandFn = commandFn;
     return this;
@@ -56,7 +60,7 @@ export class CommandNodeBuilder {
     this.node.children.push(childBuilderFn(new CommandNodeBuilder).toNode());
     return this;
   }
-  withName(name: string){
+  withName(name: string) {
     this.node.name = name;
     return this;
   }
