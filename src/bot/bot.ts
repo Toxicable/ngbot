@@ -27,7 +27,7 @@ export class Bot {
       .withCommand(/(ngbot|ng bot)/, (msg) => {
         return new MessageBuilder()
           .message(`Hello, I'm ngbot. The current areas you can ask me about are: ${
-            this.config.replyClients.map(c => `\`c.commandNode.name\``).join(', ')
+            this.config.replyClients.map(c => `\`${c.commandNode.name}\`` ).join(', ')
           }.`)
       })
       .withChildren(this.config.replyClients.map(client => client.commandNode))
