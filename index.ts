@@ -18,7 +18,7 @@ const isProd = process.env.NODE_ENV === 'prod';
 const roomNames: string = isProd ? process.env.ROOMS : 'ngbot/Lobby';
 
 const replyClients = [
-  new DocsClient(),
+  //new DocsClient(),
   new EventsClient(),
   new VersionsClient(),
   new ExplainClient()
