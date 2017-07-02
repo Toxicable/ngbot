@@ -3,9 +3,7 @@
 
 # ngbot
 The chatbot for https://gitter.im/angular/angular
-
-## Not currenctly deploy
-But you can check it out here: https://gitter.im/ngbot/Lobby
+-note: It is not currently pointed at this chatroom but you can test it out here: https://gitter.im/ngbot/Lobby
 
 # Commands
 `ngbot` - the primary keyword for the bot, most messages will have to suffixed by it to activate the bot
