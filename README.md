@@ -2,7 +2,7 @@
 [![Build Status](https://api.travis-ci.org/Toxicable/ngbot.svg?branch=master)](https://travis-ci.org/Toxicable/ngbot)
 
 # ngbot
-The chatbot for https://gitter.im/angular/angular
+The chatbot for https://gitter.im/angular/angular  
 -note: It is not currently pointed at this chatroom but you can test it out here: https://gitter.im/ngbot/Lobby
 
 # Commands
