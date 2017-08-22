@@ -9,10 +9,10 @@ export interface Version {
         url: string;
       }
     }
-  }
+  };
   'dist-tags': {
     latest: string;
     next: string;
     experimental: string;
-  }
+  };
 }

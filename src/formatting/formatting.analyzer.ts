@@ -28,7 +28,7 @@ export const WEIGHTS: AnalysisWeights = {
 
 export class FormattingAnalyzer implements AnalyzerClient {
 
-  private mb = new MessageBuilder()
+  private mb = new MessageBuilder();
 
   constructor(
   ) { }

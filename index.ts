@@ -7,6 +7,7 @@ import { Bot, BotConfig } from './src/bot/bot';
 import { VersionsClient } from './src/versions/versions.client';
 import * as http from 'http';
 
+console.log('Bot Starting...');
 console.log('Environment Variables:');
 console.log('TOKEN: ' + process.env.TOKEN);
 console.log('NODE_ENV: ' + process.env.NODE_ENV);
@@ -35,7 +36,7 @@ const bots = roomNames.split(',')
     isProd,
     replyClients,
     analyzerClients,
-    }));
+  }));
 
 // this should the errors in the server logs
 http.createServer(function (request, response) {
@@ -43,4 +44,4 @@ http.createServer(function (request, response) {
   response.end('You\'re not really meant to be here');
 }).listen(8080);
 
-console.log('Angie Started');
+console.log('ngbot Started');

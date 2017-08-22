@@ -1,5 +1,7 @@
-import { MessageBuilder } from './../src/util/message-builder';
-import { CommandDecoder2, CommandNodeBuilder } from './../src/command-tree/command-decoder2';
+import { MessageBuilder } from './../util/message-builder';
+import { CommandDecoder2, CommandNodeBuilder } from './../command-tree/command-decoder2';
+import { expect } from 'chai';
+
 describe('command-decoder2', () => {
 
   it('should find simple match', () => {
@@ -8,7 +10,7 @@ describe('command-decoder2', () => {
       .toNode();
     const commands = new CommandDecoder2(root);
     const result = commands.processMessage({ text: 'b' });
-    expect(result).toEqual(undefined);
+    expect(result).to.equal(undefined);
   });
 
   it('should find simple match', () => {
@@ -17,7 +19,7 @@ describe('command-decoder2', () => {
       .toNode();
     const commands = new CommandDecoder2(root);
     const result = commands.processMessage({ text: 'a' });
-    expect(result.toString()).toEqual('hi');
+    expect(result.toString()).to.equal('hi');
   });
 
   it('should find simple parent child match', () => {
@@ -27,7 +29,7 @@ describe('command-decoder2', () => {
       .toNode();
     const commands = new CommandDecoder2(root);
     const result = commands.processMessage({ text: 'parent child' });
-    expect(result.toString()).toEqual('child');
+    expect(result.toString()).to.equal('child');
   });
 
   it('should find with with sibling in the way', () => {
@@ -38,7 +40,7 @@ describe('command-decoder2', () => {
       .toNode();
     const commands = new CommandDecoder2(root);
     const result = commands.processMessage({ text: 'parent child2' });
-    expect(result.toString()).toEqual('child2');
+    expect(result.toString()).to.equal('child2');
   });
 
 
