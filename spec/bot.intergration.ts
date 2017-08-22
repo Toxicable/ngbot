@@ -6,7 +6,7 @@ import { EventsClient } from '../src/events/events.client';
 import { DocsClient } from '../src/docs/docs.client';
 import { MessageModel } from '../src/bot/gitter.models';
 import { MessageBuilder } from '../src/util/message-builder';
-
+import { expect } from 'chai';
 
 const mockDocsHttp = new MockHttp(
   {
@@ -82,27 +82,27 @@ describe(`Bot`, () => {
   it('should reply to a global analyzer', () => {
     dummyMessage.text = 'Hey guys, whens angular3 comming out?';
     const reply = angie.getReply(dummyMessage);
-    expect(reply).toEqual('its Angular time!');
+    expect(reply).to.equal('its Angular time!');
   });
 
   it(`should reply to a command 'Angie, give me docs for AsyncPipe'`, () => {
     dummyMessage.text = 'ngbot, give me docs for AsyncPipe';
     const reply = angie.getReply(dummyMessage);
-    expect(reply).toEqual('***[`AsyncPipe`](https://angular.io/docs/ts/latest/api/co' +
+    expect(reply).to.equal('***[`AsyncPipe`](https://angular.io/docs/ts/latest/api/co' +
       'mmon/index/AsyncPipe-pipe.html)*** is a **pipe** found in `@angular/common` and is considered *stable*.');
   });
 
   it(`should not do anything when message is not a command`, () => {
     dummyMessage.text = 'hello people';
     const reply = angie.getReply(dummyMessage);
-    expect(reply).toBe(null);
+    expect(reply).to.be(null);
   });
 
   it(`should handle bad command 'angie what's up?'`, () => {
     dummyMessage.text = `Hey ngbot, what's up?`;
     const reply = angie.getReply(dummyMessage);
     const expected = `Hello, I'm ngbot. The current areas you can ask me about are: \`docs\`, \`events\`.`;
-    expect(reply).toEqual(expected);
+    expect(reply).to.equal(expected);
   });
 
 });

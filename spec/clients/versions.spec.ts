@@ -3,6 +3,7 @@ import { VersionsClient } from '../../src/versions/versions.client';
 import { Version } from '../../src/versions/versions.models';
 import { MessageBuilder } from '../../src/util/message-builder';
 import { Observable } from 'rxjs';
+import { expect } from 'chai';
 
 const mockHttp = new MockHttp(
   {
@@ -30,24 +31,24 @@ describe(`Versions`, () => {
   describe('regex', () => {
     it('should match for version', () => {
       const match = client.commandNode.matcher.test('version');
-      expect(match).toEqual(true);
+      expect(match).to.equal(true);
     });
 
     it('should match for versions', () => {
       const match = client.commandNode.matcher.test('versions');
-      expect(match).toEqual(true);
+      expect(match).to.equal(true);
     });
 
     it('should not match for versionsandpie', () => {
       const match = client.commandNode.matcher.test('versionsandpie');
-      expect(match).toEqual(true);
+      expect(match).to.equal(true);
     });
   });
 
   describe('fn', () => {
     it(`should get latest version`, () => {
       const actual = client.commandNode.commandFn({text: 'version'}).toString();
-      expect(actual).toBeDefined();
+      expect(actual).equal('Tells you the current versiosn of Angular and it\'s related packages');
     });
   });
 

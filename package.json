@@ -8,11 +8,10 @@
     "url": "https://github.com/Toxicable/angular-gitter-replybot"
   },
   "scripts": {
-    "start": "node ./index.js",
-    "build": "node copy-gitter-token.js && npm run clean && tsc -p tsconfig.app.json && cpy package.json dist && cpy ngbot-853199833b9e.json dist && cpy app.yaml dist",
-    "clean": "rimraf dist",
-    "test": "karma start --single-run",
-    "test:watch": "karma start",
+    "start": "node index",
+    "build": "node build",
+    "test": "mocha -r  ts-node/register spec/**/*.spec.ts",
+    "test:watch": "npm run test -- --watch-extensions ts --watch --recursive --inspect",
     "lint": "tslint spec/**/*.ts src/**/*.ts --force"
   },
   "author": "Fabian Wiles",
@@ -26,21 +25,17 @@
     "semver": "^5.3.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.4",
     "@types/cheerio": "^0.17.31",
-    "@types/jasmine-node": "^1.14.30",
     "@types/marked": "^0.0.28",
+    "@types/mocha": "^2.2.42",
     "@types/node": "^7.0.4",
     "@types/semver": "^5.3.30",
+    "chai": "^4.1.1",
     "cpy-cli": "^1.0.1",
-    "jasmine": "^2.5.3",
-    "jasmine-core": "^2.5.2",
-    "jasmine-node": "^1.14.5",
-    "jasmine-node-debug": "^0.1.1",
-    "karma": "^1.4.1",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-jasmine": "^1.1.0",
-    "karma-typescript": "^3.0.0",
+    "mocha": "^3.5.0",
     "rimraf": "^2.5.4",
+    "ts-node": "^3.3.0",
     "tslint": "^4.4.1",
     "typescript": "^2.1.5"
   }

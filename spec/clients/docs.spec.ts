@@ -2,6 +2,7 @@ import { MockHttp } from './../mock-utils';
 import { DocsClient } from '../../src/docs/docs.client';
 import { MessageModel } from '../../src/bot/gitter.models';
 import { MessageBuilder } from '../../src/util/message-builder';
+import { expect } from 'chai';
 
 const mockHttp = new MockHttp(
  {
@@ -26,20 +27,22 @@ const mockHttp = new MockHttp(
   }
 );
 
+
 describe(`Docs Client`, () => {
 
   const client = new DocsClient(mockHttp);
 
   it('should match docs with different wording', () => {
     const matched = client.commandNode.matcher.test('docs');
-    expect(matched).toEqual(true);
+    expect
+    expect(matched).to.equal(true);
   })
 
   it('should contain link to correct API', () => {
     const msg = {text: 'docs AsyncPipe'};
     const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected = 'https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html';
-    expect(client.command(msg).toString()).toContain(expected);
+    expect(client.command(msg).toString()).to.contain(expected);
   })
 
   it(`should get docs for an existing entry`, () => {
@@ -48,7 +51,7 @@ describe(`Docs Client`, () => {
     const expected: string = `***[\`AsyncPipe\`](https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html)` +
       `*** is a **pipe** found in \`@angular/common\` and ` +
       `is considered *stable*.`;
-    expect(actual).toEqual(expected);
+    expect(actual).to.equal(expected);
   });
 
   it(`should provide a helpful message if docs don't exist`, () => {
@@ -57,7 +60,7 @@ describe(`Docs Client`, () => {
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for _nonsense_, ` +
       `but I couldn't find anything. Might be a good idea to look directly at ` +
       `[API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
-    expect(actual).toEqual(expected);
+    expect(actual).to.equal(expected);
   });
 
   it(`should provide a helpful message if docs don't exist (for more than one word)`, () => {
@@ -66,7 +69,7 @@ describe(`Docs Client`, () => {
     const expected: string = `Aww, bummer :anguished: Looks like you wanted docs for ` +
       `_some nonsense here_, but I couldn't find anything. Might be a good idea ` +
       `to look directly at [API Reference](https://angular.io/docs/ts/latest/api/)! :grin:`;
-    expect(actual).toEqual(expected);
+    expect(actual).to.equal(expected);
   });
 
 });
