@@ -6,7 +6,7 @@ import { MessageBuilder } from '../util/message-builder';
 import { Http } from '../util/http';
 import * as semver from 'semver';
 import { CommandNode } from '../command-tree/command-decoder2';
-import { Observable } from 'rxjs'
+import { Observable } from 'rxjs';
 
 
 export class VersionsClient implements CommandClient {
@@ -46,11 +46,11 @@ export class VersionsClient implements CommandClient {
   constructor(
     private http = new Http(),
   ) {
-    //1000 * 60 * 30 is 30 min.. I think :D
+    // 1000 * 60 * 30 is 30 min.. I think :D
     Observable.timer(0, 1000 * 60 * 30)
       .flatMap(i => this.updateVersions())
       .subscribe(versions => {
-        this.versions = versions
+        this.versions = versions;
       });
 
     this.commandNode = new CommandNodeBuilder()

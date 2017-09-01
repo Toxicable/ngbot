@@ -1,10 +1,11 @@
-import * as util from '../src/util/formatting';
+import * as util from '../util/formatting';
+import { expect } from 'chai';
 
 describe(`getTextOutsideCodeBlock`, () => {
 
   it(`should work when there is no code block in the message`, () => {
     const message: string = `A random message without any code block.`;
-    expect(util.getTextOutsideCodeBlocks(message)).toEqual(message + '\n');
+    expect(util.getTextOutsideCodeBlocks(message)).to.equal(message + '\n');
   });
 
   it(`should strip out code blocks`, () => {
@@ -18,7 +19,7 @@ and \`some _more_\` text`;
     const expected = `A line that is not code
 and some _more_ text
 `;
-    expect(actual).toEqual(expected);
+    expect(actual).to.equal(expected);
   });
 
   it(`should not strip out things that it should not strip out ;)`, () => {
@@ -34,7 +35,7 @@ this.isCode(which.isAbsolutelyNotProperly);
 formatted(() => {});
 and some _more_ text
 `;
-    expect(actual).toEqual(expected);
+    expect(actual).to.equal(expected);
   });
 
 });

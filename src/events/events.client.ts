@@ -4,7 +4,7 @@ import { Event } from './events.models';
 import { MessageBuilder } from '../util/message-builder';
 import { CommandClient } from '../reply-client';
 import { CommandNode, CommandNodeBuilder } from '../command-tree/command-decoder2';
-import { getQuery } from "../util/string-helpers";
+import { getQuery } from '../util/string-helpers';
 
 
 export class EventsClient implements CommandClient {
@@ -31,7 +31,7 @@ export class EventsClient implements CommandClient {
   private command = (msg: MessageModel) => {
     const query = getQuery(this.commandNode.matcher, msg.text);
 
-    if(!query){
+    if (!query) {
       return this.mb.message(this.eventsList);
     }
 

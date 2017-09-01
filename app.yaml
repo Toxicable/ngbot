@@ -5,3 +5,4 @@ manual_scaling:
 env_variables:
   NODE_ENV: 'prod'
   ROOMS: 'ngbot/Lobby'
+  TOKEN: $TOKEN_PLACEHOLDER

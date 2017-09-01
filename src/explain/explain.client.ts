@@ -5,7 +5,7 @@ import { MessageBuilder } from './../util/message-builder';
 import { MessageModel } from '../bot/gitter.models';
 import { explanations } from './explanations';
 import { CommandClient } from '../reply-client';
-import { getQuery } from "../util/string-helpers";
+import { getQuery } from '../util/string-helpers';
 
 
 export class ExplainClient implements CommandClient {

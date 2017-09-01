@@ -4,7 +4,7 @@ import { MessageModel } from './../bot/gitter.models';
 import { CommandClient } from '../reply-client';
 import { Http } from '../util/http';
 import { CommandNode, CommandNodeBuilder } from '../command-tree/command-decoder2';
-import { getQuery } from "../util/string-helpers";
+import { getQuery } from '../util/string-helpers';
 
 export class DocsClient implements CommandClient {
 
@@ -23,13 +23,13 @@ export class DocsClient implements CommandClient {
     let: 'a', // let !?
     pipe: 'a',
     'type-alias': 'a'
-  }
+  };
 
   private processDocs(docs): DocsApi[] {
     return Object.keys(docs)
       .map(key => docs[key])
       // flatten out the modules into a single list of APIs
-      .reduce((a, b) => [...a, ...b], [])
+      .reduce((a, b) => [...a, ...b], []);
   }
 
   private formatApiToMessage(api: DocsApi): string {

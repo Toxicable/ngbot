@@ -3,18 +3,18 @@ import { MessageModel } from './../bot/gitter.models';
 
 export class CommandDecoder2 {
   constructor(
-    //it must have a root node
+    // it must have a root node
     private root: CommandNode,
   ) { }
 
-  //it needs a root but dosen't need extra children
+  // it needs a root but dosen't need extra children
   registerSubNodes(subNodes: CommandNode[]) {
     subNodes.forEach(node => this.root.children.push(node));
   }
 
   processMessage(message: MessageModel): MessageBuilder {
     const command = this.getMatch(message, this.root);
-    //its possible it might not pass back a function
+    // its possible it might not pass back a function
     if (command instanceof Function) {
       return command(message);
     }
