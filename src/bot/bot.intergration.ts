@@ -1,3 +1,4 @@
+<<<<<<< HEAD:spec/bot.intergration.ts
 import { MockHttp } from './mock-utils';
 import { VersionsClient } from './../src/versions/versions.client';
 import { AnalyzerClient } from './../src/reply-client';
@@ -6,6 +7,16 @@ import { EventsClient } from '../src/events/events.client';
 import { DocsClient } from '../src/docs/docs.client';
 import { MessageModel } from '../src/bot/gitter.models';
 import { MessageBuilder } from '../src/util/message-builder';
+=======
+import { MockHttp } from '../testing-tools/mock-utils';
+import { VersionsClient } from './../versions/versions.client';
+import { AnalyzerClient } from './../reply-client';
+import { Bot } from '../bot/bot';
+import { EventsClient } from '../events/events.client';
+import { DocsClient } from '../docs/docs.client';
+import { MessageModel } from '../bot/gitter.models';
+import { MessageBuilder } from '../util/message-builder';
+>>>>>>> 472f488593a4d805e2b63c06337bad7ac2ecc013:src/bot/bot.intergration.ts
 import { expect } from 'chai';
 
 const mockDocsHttp = new MockHttp(

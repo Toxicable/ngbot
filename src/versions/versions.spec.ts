@@ -1,4 +1,4 @@
-import { MockHttp } from './../mock-utils';
+import { MockHttp } from './../testing-tools/mock-utils';
 import { VersionsClient } from '../../src/versions/versions.client';
 import { Version } from '../../src/versions/versions.models';
 import { MessageBuilder } from '../../src/util/message-builder';

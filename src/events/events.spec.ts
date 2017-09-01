@@ -1,5 +1,5 @@
-import {EventsClient} from '../../src/events/events.client';
-import {MessageBuilder} from '../../src/util/message-builder';
+import {EventsClient} from './events.client';
+import {MessageBuilder} from '../util/message-builder';
 
 import { expect } from 'chai';
 

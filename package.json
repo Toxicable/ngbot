@@ -1,11 +1,11 @@
 {
-  "name": "angular-gitter-replybot",
+  "name": "ngbot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "repository": {
     "type": "public",
-    "url": "https://github.com/Toxicable/angular-gitter-replybot"
+    "url": "https://github.com/Toxicable/ngbot"
   },
   "scripts": {
     "start": "node index",

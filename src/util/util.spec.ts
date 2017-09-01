@@ -1,4 +1,4 @@
-import * as util from '../src/util/formatting';
+import * as util from '../util/formatting';
 import { expect } from 'chai';
 
 describe(`getTextOutsideCodeBlock`, () => {

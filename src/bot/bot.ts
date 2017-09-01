@@ -28,7 +28,7 @@ export class Bot {
         return new MessageBuilder()
           .message(`Hello, I'm ngbot. The current areas you can ask me about are: ${
             this.config.replyClients.map(c => `\`${c.commandNode.name}\`` ).join(', ')
-          }.`)
+          }.`);
       })
       .withChildren(this.config.replyClients.map(client => client.commandNode))
       .toNode();
@@ -77,7 +77,7 @@ export class Bot {
 
   public getReply(message: MessageModel): string {
     const analyzerReply = this.config.analyzerClients.map(c => c.getReply(message)).filter(mb => !!mb);
-    //TODO: use cooler syntax to do this :D
+    // TODO: use cooler syntax to do this :D
     if (analyzerReply.length > 0) {
       return analyzerReply[0].toString();
     }
