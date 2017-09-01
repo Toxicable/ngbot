@@ -1,4 +1,4 @@
-import { MockHttp } from './../mock-utils';
+import { MockHttp } from '../testing-tools/mock-utils';
 import { DocsClient } from '../../src/docs/docs.client';
 import { MessageModel } from '../../src/bot/gitter.models';
 import { MessageBuilder } from '../../src/util/message-builder';
@@ -34,25 +34,16 @@ describe(`Docs Client`, () => {
 
   it('should match docs with different wording', () => {
     const matched = client.commandNode.matcher.test('docs');
-<<<<<<< HEAD:spec/clients/docs.spec.ts
     expect
     expect(matched).to.equal(true);
   })
-=======
-    expect(matched).to.equal(true);
-  });
->>>>>>> 472f488593a4d805e2b63c06337bad7ac2ecc013:src/docs/docs.spec.ts
 
   it('should contain link to correct API', () => {
     const msg = {text: 'docs AsyncPipe'};
     const actual: string = client.commandNode.children[0].commandFn(msg).toString();
     const expected = 'https://angular.io/docs/ts/latest/api/common/index/AsyncPipe-pipe.html';
     expect(client.command(msg).toString()).to.contain(expected);
-<<<<<<< HEAD:spec/clients/docs.spec.ts
   })
-=======
-  });
->>>>>>> 472f488593a4d805e2b63c06337bad7ac2ecc013:src/docs/docs.spec.ts
 
   it(`should get docs for an existing entry`, () => {
     const msg = {text: 'docs AsyncPipe'};
